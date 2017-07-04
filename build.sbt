@@ -20,21 +20,24 @@ lazy val jogi = crossProject.in(file("."))
 
     libraryDependencies += scalaTest % Test
   )
-  .jsSettings(
-    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
-  )
-  .jsSettings(Akka.js.config: _*)
-  .jvmSettings(
-//    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
+  .settings(
     libraryDependencies ++= Seq(
-      "com.trueaccord.scalapb" %% "scalapb-runtime" % com.trueaccord.scalapb.compiler.Version.scalapbVersion % "protobuf",
+      "com.trueaccord.scalapb" %%% "scalapb-runtime" % com.trueaccord.scalapb.compiler.Version.scalapbVersion % "protobuf",
       "io.grpc" % "grpc-netty" % com.trueaccord.scalapb.compiler.Version.grpcJavaVersion,
       "com.trueaccord.scalapb" %% "scalapb-runtime-grpc" % com.trueaccord.scalapb.compiler.Version.scalapbVersion
     ),
     PB.targets in Compile := Seq(
       scalapb.gen() -> (sourceManaged in Compile).value
+    ),
+    PB.protoSources in Compile ++= Seq(
+      file("shared/src/main/protobuf/")
     )
   )
+//    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
+  .jsSettings(
+    libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
+  )
+  .jsSettings(Akka.js.config: _*)
   .jvmSettings(Akka.config: _*)
   .jvmSettings(TypesafeConfig.config: _*)
 
