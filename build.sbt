@@ -26,6 +26,14 @@ lazy val jogi = crossProject.in(file("."))
   .jsSettings(Akka.js.config: _*)
   .jvmSettings(
 //    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
+    libraryDependencies ++= Seq(
+      "com.trueaccord.scalapb" %% "scalapb-runtime" % com.trueaccord.scalapb.compiler.Version.scalapbVersion % "protobuf",
+      "io.grpc" % "grpc-netty" % com.trueaccord.scalapb.compiler.Version.grpcJavaVersion,
+      "com.trueaccord.scalapb" %% "scalapb-runtime-grpc" % com.trueaccord.scalapb.compiler.Version.scalapbVersion
+    ),
+    PB.targets in Compile := Seq(
+      scalapb.gen() -> (sourceManaged in Compile).value
+    )
   )
   .jvmSettings(Akka.config: _*)
   .jvmSettings(TypesafeConfig.config: _*)
