@@ -13,17 +13,26 @@ lazy val jogi = crossProject.in(file("."))
     name := "Jogi JS",
     scalaJSUseMainModuleInitializer := true,
 
+    scalacOptions ++= Seq(
+      "-feature",
+      "-language:implicitConversions"
+    ),
+
     libraryDependencies += scalaTest % Test
   )
   .jsSettings(
     libraryDependencies += "org.scala-js" %%% "scalajs-dom" % "0.9.1"
   )
+  .jsSettings(Akka.js.config: _*)
   .jvmSettings(
-    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
+//    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
   )
+  .jvmSettings(Akka.config: _*)
+  .jvmSettings(TypesafeConfig.config: _*)
 
 lazy val jogiJS = jogi.js
   .enablePlugins(
     ScalaJSPlugin
   )
+
 lazy val jogiJVM = jogi.jvm
