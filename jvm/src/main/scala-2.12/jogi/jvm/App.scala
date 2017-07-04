@@ -27,7 +27,9 @@ object App {
       |    <meta charset="UTF-8">
       |    <title>The Scala.js Tutorial</title>
       |    <script type="text/javascript">
-      |      const the_account = [${acc.map(_.toString).mkString(", ")}];
+      |      window.poo = {
+      |        the_account: [${acc.map(_.toString).mkString(", ")}]
+      |      }
       |    </script>
       |  </head>
       |  <body>

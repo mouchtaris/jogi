@@ -4,7 +4,7 @@ import scala.language.{ postfixOps, implicitConversions }
 import org.scalajs.dom, dom.document, dom.raw.Element
 import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
 import com.typesafe.config.{ Config, ConfigFactory }
-
+import jogi.proto.{ jogi ⇒ proto }
 
 object App {
 
@@ -62,11 +62,20 @@ object App {
       |}
     """.stripMargin
 
+  import scalajs.js, js.annotation._
+  @js.native
+  @JSGlobal("poo")
+  object poo extends js.Object {
+    def the_account: js.Array[Byte] = js.native
+  }
+
   def main(args: Array[String]): Unit = {
     implicit val system: ActorSystem = ActorSystem("Bols", Config)
     val eventHandler: ActorRef = system actorOf Props[EventHandler]
 
-    document.body.onclick = eventHandler !
+    document.body.onclick = _ ⇒ eventHandler ! poo.the_account.toString
+
+    val acc = proto.Account.parseFrom(poo.the_account.toArray)
 
     import system.dispatcher
     import scala.concurrent.duration._
@@ -74,6 +83,8 @@ object App {
       println("Hello lol")
       eventHandler ! "ready to roll, baby"
       eventHandler ! Config.toString
+      eventHandler ! s"dis is teh account: ${poo.the_account}"
+      eventHandler ! s"and dis is deserialized: ${acc}"
     }
   }
 }
