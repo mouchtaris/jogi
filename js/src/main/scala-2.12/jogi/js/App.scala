@@ -1,10 +1,15 @@
 package jogi.js
 
-import scala.language.{ postfixOps, implicitConversions }
-import org.scalajs.dom, dom.document, dom.raw.Element
-import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
-import com.typesafe.config.{ Config, ConfigFactory }
-import jogi.proto.{ jogi ⇒ proto }
+import scala.language.{implicitConversions, postfixOps}
+import org.scalajs.dom
+import dom.document
+import dom.raw.Element
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import com.typesafe.config.{Config, ConfigFactory}
+import io.grpc.ManagedChannelBuilder
+import jogi.proto, proto.{ JogaGrpc, Account }
+
+import scala.concurrent.{ Future, ExecutionContext, Await }
 
 object App {
 
@@ -42,7 +47,7 @@ object App {
   val lol: String ⇒ Unit = {
     import jogi.model._
     (Email.apply _)
-      .andThen(Account)
+      .andThen(jogi.model.Account)
       .andThen(pre)
       .andThen(body ++ _.toElem)
   }
@@ -53,7 +58,6 @@ object App {
         lol(any.toString)
     }
   }
-
 
   lazy val Config: Config = ConfigFactory parseString """
       |akka {
@@ -67,6 +71,11 @@ object App {
   @JSGlobal("poo")
   object poo extends js.Object {
     def the_account: js.Array[Byte] = js.native
+  }
+
+  implicit class stringpimp(val self: String) extends AnyVal {
+    def inspect: String = self
+          .replaceAll("\\n", "\\\\n")
   }
 
   def main(args: Array[String]): Unit = {

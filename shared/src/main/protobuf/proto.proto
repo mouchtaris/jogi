@@ -1,0 +1,12 @@
+// vim: et ts=2 sw=2
+syntax = "proto3";
+
+package jogi;
+
+message Account {
+  string email = 1;
+}
+
+service Joga {
+  rpc AddAccount (Account) returns (Account);
+}

@@ -1,21 +1,19 @@
-package jogi.jvm
-
+package jogi
+package jvm
 import java.io.FileOutputStream
-
+import scala.concurrent.{duration, Await, ExecutionContext, Future}, duration._
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-
-import scala.concurrent.{duration, Await, ExecutionContext, Future}
-import duration._
-import scala.language.postfixOps
 import com.typesafe.config.{Config, ConfigFactory}
+import io.grpc.ServerBuilder
+import incubate._
 
 object App {
 
-  final case class Stdout(any: Any)
+  final case class Complete(a: a forSome {type a})
 
-  final class StdStreamer extends Actor {
+  final class Completer extends Actor {
     def receive: Receive = {
-      case Stdout(any) ⇒ println(any)
+      case Complete(a) ⇒ sender() ! a
     }
   }
 
@@ -41,7 +39,7 @@ object App {
     """.stripMargin
 
   def main(args: Array[String]): Unit = {
-    import jogi.proto.jogi.Account
+    import jogi.proto.Account
     val acc: Account = Account(email = "bobos@com.com")
     val accbytes: Array[Byte] = {
       val bout = new java.io.ByteArrayOutputStream(4096)
@@ -57,11 +55,28 @@ object App {
     val config = ConfigFactory.defaultApplication
     implicit val system = ActorSystem("Backbols")
 
+    object joga extends jogi.proto.JogaGrpc.Joga {
+      val completer = system actorOf Props[Completer]
+      import akka.pattern.ask
+      implicit val timeout: akka.util.Timeout = 5 seconds
+      import ExecutionContext.Implicits.global
+      override def addAccount(request: Account): Future[Account] =
+        completer ask Complete(request) map {
+          case acc: Account ⇒ acc
+        }
+    }
+
+    val service = jogi.proto.JogaGrpc.bindService(joga, ExecutionContext.global)
+    val server = ServerBuilder.forPort(19000)
+      .addService(service)
+      .build()
+      .start()
+
     val streamer = system actorOf Props[StdStreamer]
-    streamer ! Stdout(config.toString)
-    streamer ! Stdout(streamer.path)
-    streamer ! Stdout("Hi ppl")
-    streamer ! Stdout(s"deserialized account: ${Account.parseFrom(accbytes)}")
+    streamer ! StdOut(config.toString)
+    streamer ! StdOut(streamer.path)
+    streamer ! StdOut("Hi ppl")
+    streamer ! StdOut(s"deserialized account: ${Account.parseFrom(accbytes)}")
 
     val theEnd: Future[Unit] = {
       import ExecutionContext.Implicits.global
