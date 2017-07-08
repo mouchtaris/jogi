@@ -86,6 +86,11 @@ object App {
 
     val acc = proto.Account.parseFrom(poo.the_account.toArray)
 
+//    val channel = ManagedChannelBuilder.forAddress("localhost", 18000).build()
+//    val stub = JogaGrpc.stub(channel)
+//    val futureAccountReply = stub.addAccount(acc)
+
+
     import system.dispatcher
     import scala.concurrent.duration._
     system.scheduler.scheduleOnce(0 millis) {
@@ -93,7 +98,12 @@ object App {
       eventHandler ! "ready to roll, baby"
       eventHandler ! Config.toString
       eventHandler ! s"dis is teh account: ${poo.the_account}"
-      eventHandler ! s"and dis is deserialized: ${acc}"
+      eventHandler ! s"and dis is deserialized: ${acc.toString.inspect}"
+//      Await.result(
+//        futureAccountReply
+//          .map { acc2 ⇒ eventHandler ! s"account reply: ${acc2.toString.inspect}" },
+//        10 seconds
+//      )
     }
   }
 }
