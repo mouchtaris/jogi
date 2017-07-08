@@ -55,23 +55,6 @@ object App {
     val config = ConfigFactory.defaultApplication
     implicit val system = ActorSystem("Backbols")
 
-    object joga extends jogi.proto.JogaGrpc.Joga {
-      val completer = system actorOf Props[Completer]
-      import akka.pattern.ask
-      implicit val timeout: akka.util.Timeout = 5 seconds
-      import ExecutionContext.Implicits.global
-      override def addAccount(request: Account): Future[Account] =
-        completer ask Complete(request) map {
-          case acc: Account ⇒ acc
-        }
-    }
-
-    val service = jogi.proto.JogaGrpc.bindService(joga, ExecutionContext.global)
-    val server = ServerBuilder.forPort(19000)
-      .addService(service)
-      .build()
-      .start()
-
     val streamer = system actorOf Props[StdStreamer]
     streamer ! StdOut(config.toString)
     streamer ! StdOut(streamer.path)

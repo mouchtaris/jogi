@@ -6,7 +6,7 @@ package jogi;
 message Account {
   string email = 1;
 }
-
-service Joga {
-  rpc AddAccount (Account) returns (Account);
-}
+//
+//service Joga {
+//  rpc AddAccount (Account) returns (Account);
+//}

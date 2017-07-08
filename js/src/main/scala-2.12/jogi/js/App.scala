@@ -7,7 +7,7 @@ import dom.raw.Element
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import com.typesafe.config.{Config, ConfigFactory}
 import io.grpc.ManagedChannelBuilder
-import jogi.proto, proto.{ JogaGrpc, Account }
+import jogi.proto, proto.{ Account }
 
 import scala.concurrent.{ Future, ExecutionContext, Await }
 
