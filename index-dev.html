@@ -24,16 +24,16 @@
       }
 
       function hello () {
-       const buf = makebuf([1, 2, 3])
-       const send = ws => { ws.send(buf); }
-       const onopen = (ws, e) => { console.log(e); send(ws); }
-       makews(onopen)
+         const buf = makebuf([1, 2, 3])
+         const send = ws => { ws.send(buf); }
+         const onopen = (ws, e) => { console.log(e); send(ws); }
+         makews(onopen)
       }
     </script>
   </head>
   <body>
     <!-- Include Scala.js compiled code -->
-    <script type="text/javascript" src="./js/target/scala-2.12/jogi-js-fastopt.js"></script>
+    <script type="text/javascript" src="./js/target/scala-2.12/jogi-fastopt.js"></script>
   </body>
 </html>
 

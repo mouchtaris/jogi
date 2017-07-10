@@ -7,13 +7,23 @@ import dom.raw.Element
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import com.typesafe.config.{Config, ConfigFactory}
 import io.grpc.ManagedChannelBuilder
-import jogi.proto, proto.{ Account }
+import jogi.proto
+import proto.Account
+import org.scalajs.dom.raw.Blob
+import scala.concurrent.duration._
+import scala.collection.mutable.ArrayBuffer
+import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.Promise
+import scala.util.Success
+import scala.util.Failure
+import scalajs.js
+import scala.scalajs.js.typedarray
+import js.annotation._
+import js.JSConverters._
 
-import scala.concurrent.{ Future, ExecutionContext, Await }
-
-object App {
-
+object utilground {
   final case class pre(text: Any)
+
   implicit val `toElem[p]`: toElem[pre] = {
     case pre(text) ⇒ {
       val el: Element = document createElement "pre"
@@ -39,23 +49,25 @@ object App {
     def applyTo[b](f: a ⇒ b): () ⇒ b = () ⇒ f(self)
   }
 
+
   object body {
     def ++(el: Element): Unit =
       document.body appendChild el
   }
 
-  val lol: String ⇒ Unit = {
-    import jogi.model._
-    (Email.apply _)
-      .andThen(jogi.model.Account)
-      .andThen(pre)
-      .andThen(body ++ _.toElem)
-  }
+  val say: String ⇒ Unit =
+    body ++ pre(_).toElem
+
+  final case class Saying(msg: String)
+  final case class WsMessage(data: Array[Byte])
 
   class EventHandler extends Actor {
     def receive: Receive = {
-      case any ⇒
-        lol(any.toString)
+      case Saying(saying) ⇒
+        say(saying)
+      case WsMessage(data) ⇒
+        val acc = jogi.proto.Account.parseFrom(data)
+        self ! Saying(acc.toString)
     }
   }
 
@@ -66,7 +78,6 @@ object App {
       |}
     """.stripMargin
 
-  import scalajs.js, js.annotation._
   @js.native
   @JSGlobal("poo")
   object poo extends js.Object {
@@ -78,21 +89,51 @@ object App {
           .replaceAll("\\n", "\\\\n")
   }
 
+  implicit val system: ActorSystem = ActorSystem("Bols", Config)
+  val eventHandler: ActorRef = system actorOf Props[EventHandler]
+  val wsopen: Promise[Unit] = Promise()
+  import system.dispatcher
+
+  val acc = proto.Account.parseFrom(poo.the_account.toArray)
+  val accbytes = acc.toByteArray
+  val accblob = new Blob(accbytes.toJSArray.map(_.asInstanceOf[js.Any]))
+
+  val wsaddr = "ws://localhost:19000/ws"
+  val ws = {
+    val ws = new dom.WebSocket(wsaddr)
+
+    ws.onerror = ev ⇒ println(s"error: $ev")
+
+    ws.onclose = ev ⇒ println(s"close: $ev")
+
+    ws.onmessage = ev ⇒ eventHandler !
+      Saying(ev.data.asInstanceOf[dom.Blob].toString)
+
+    ws.onopen = ev ⇒ {
+      println(s"open: $ev")
+      wsopen.success(())
+    }
+    
+    ws
+  }
+
+  def setupBody(): Unit = {
+    document.body.onclick = _ ⇒
+      wsopen.future.onComplete {
+        case Success(_) ⇒ ws.send(accblob)
+        case Failure(ex) ⇒ eventHandler ! ex
+      }
+  }
+}
+
+object App {
+  import utilground.{ Config, _ }
+  import utilground.system.dispatcher
+
   def main(args: Array[String]): Unit = {
-    implicit val system: ActorSystem = ActorSystem("Bols", Config)
-    val eventHandler: ActorRef = system actorOf Props[EventHandler]
-
-    document.body.onclick = _ ⇒ eventHandler ! poo.the_account.toString
-
-    val acc = proto.Account.parseFrom(poo.the_account.toArray)
-
 //    val channel = ManagedChannelBuilder.forAddress("localhost", 18000).build()
 //    val stub = JogaGrpc.stub(channel)
 //    val futureAccountReply = stub.addAccount(acc)
-
-
-    import system.dispatcher
-    import scala.concurrent.duration._
     system.scheduler.scheduleOnce(0 millis) {
       println("Hello lol")
       eventHandler ! "ready to roll, baby"
