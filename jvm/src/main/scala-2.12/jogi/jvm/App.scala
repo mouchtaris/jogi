@@ -1,11 +1,25 @@
 package jogi
 package jvm
 import java.io.FileOutputStream
-import scala.concurrent.{duration, Await, ExecutionContext, Future}, duration._
+
+import akka.NotUsed
+import akka.Done
+
+import scala.concurrent.{duration, Await, ExecutionContext, Future}
+import duration._
 import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import com.typesafe.config.{Config, ConfigFactory}
 import io.grpc.ServerBuilder
 import incubate._
+import akka.http.scaladsl.{model, server, Http}
+import server._
+import Directives._
+import model.ws.{BinaryMessage, Message}
+import akka.stream.{scaladsl, ActorMaterializer}
+import scaladsl.{Flow, Keep, Sink, Source}
+import akka.util.ByteString
+
+import scala.concurrent.Promise
 
 object App {
 
@@ -54,6 +68,24 @@ object App {
 
     val config = ConfigFactory.defaultApplication
     implicit val system = ActorSystem("Backbols")
+    implicit val materializer = ActorMaterializer()
+
+    val messageHandler: Message ⇒ Source[Message, NotUsed] =
+      _.asBinaryMessage.asScala.dataStream
+      .fold(ByteString())(_ ++ _)
+      .map(BinaryMessage.apply)
+      .mapMaterializedValue(_ ⇒ NotUsed)
+
+    val wsHandler: Flow[Message, Message, _] = Flow[Message]
+      .flatMapConcat(messageHandler)
+
+    val promiseOfGoodbye: Promise[Done] = Promise()
+
+    val route: Route =
+      (get & path("ws")) { handleWebSocketMessages(wsHandler) } ~
+        (delete & path("ws")) { promiseOfGoodbye.success(Done); complete("ok'") }
+
+    val serverBinding = Http().bindAndHandle(route, interface = "0.0.0.0", port = 19000)
 
     val streamer = system actorOf Props[StdStreamer]
     streamer ! StdOut(config.toString)
@@ -63,10 +95,15 @@ object App {
 
     val theEnd: Future[Unit] = {
       import ExecutionContext.Implicits.global
-      system.terminate() map println
+      promiseOfGoodbye.future
+        .flatMap(_ ⇒ serverBinding)
+        .map(_.unbind())
+        .map(_ ⇒ system)
+        .flatMap(_.terminate())
+        .map(println)
     }
 
-    Await result (theEnd, 1 second)
+    Await result (theEnd, Duration.Inf)
   }
 
 }
