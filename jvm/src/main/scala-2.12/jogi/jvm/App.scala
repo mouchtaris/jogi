@@ -42,6 +42,27 @@ object App {
       |      window.poo = {
       |        the_account: [${acc.map(_.toString).mkString(", ")}]
       |      }
+      |      window.lastmsg = 1
+      |
+      |      function makews (onopen) {
+      |         const ws = new WebSocket('ws://localhost:19000/ws')
+      |         ws.onerror = e => { console.log('error'); }
+      |         ws.onclose = e => { console.log('close'); }
+      |         ws.onopen = e => { console.log('open'); onopen(ws, e); }
+      |         ws.onmessage = e => { console.log('message ' + e.data.toString()); window.lastmsg = e; }
+      |         return ws;
+      |      }
+      |
+      |      function makebuf(arr) {
+      |         return new Uint8Array(arr).buffer
+      |      }
+      |
+      |      function hello () {
+      |       const buf = makebuf([1, 2, 3])
+      |       const send = ws => { ws.send(buf); }
+      |       const onopen = (ws, e) => { console.log(e); send(ws); }
+      |       makews(onopen)
+      |      }
       |    </script>
       |  </head>
       |  <body>
