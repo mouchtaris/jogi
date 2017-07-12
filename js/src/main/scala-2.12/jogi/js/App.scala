@@ -10,6 +10,7 @@ import io.grpc.ManagedChannelBuilder
 import jogi.proto
 import proto.Account
 import org.scalajs.dom.raw.Blob
+
 import scala.concurrent.duration._
 import scala.collection.mutable.ArrayBuffer
 import scala.concurrent.{Await, ExecutionContext, Future}
@@ -18,8 +19,10 @@ import scala.util.Success
 import scala.util.Failure
 import scalajs.js
 import scala.scalajs.js.typedarray
+import scala.scalajs.js.typedarray
 import js.annotation._
 import js.JSConverters._
+import scala.scalajs.js.typedarray.Uint8Array
 
 object utilground {
   final case class pre(text: Any)
@@ -49,6 +52,36 @@ object utilground {
     def applyTo[b](f: a ⇒ b): () ⇒ b = () ⇒ f(self)
   }
 
+
+  implicit def blobToByteArray(blob: Blob)(
+      implicit
+      ec: ExecutionContext
+  ): Future[Array[Byte]] = {
+    val reader = new dom.FileReader
+    reader.readAsArrayBuffer(blob)
+    toReadyFuture(reader)(_.onloadend = _)
+      .map { _.result.asInstanceOf[typedarray.ArrayBuffer] }
+      .map { new Uint8Array(_).toArray.map(_.toByte) }
+  }
+
+  implicit def bytesToBlob(bytes: Array[Byte]): Blob =
+    new Blob(js.Array(new Uint8Array(bytes.toJSArray)))
+
+  final implicit class CastToDeco[t](val self: t) extends AnyVal {
+    def castTo[u](implicit ev: t ⇒ u): u = self
+  }
+
+  trait Inspect[t] {
+    def apply(self: t): String
+  }
+  final implicit class InspectDeco[t](val self: t) extends AnyVal {
+    def inspect(implicit i: Inspect[t]): String = i(self)
+  }
+
+  final implicit object InspectByteArray extends Inspect[Array[Byte]] {
+    def apply(arr: Array[Byte]): String =
+      java.util.Arrays.toString(arr)
+  }
 
   object body {
     def ++(el: Element): Unit =
@@ -91,38 +124,71 @@ object utilground {
 
   implicit val system: ActorSystem = ActorSystem("Bols", Config)
   val eventHandler: ActorRef = system actorOf Props[EventHandler]
-  val wsopen: Promise[Unit] = Promise()
   import system.dispatcher
 
+  val asap: ExecutionContext = new ExecutionContext {
+    def execute(runnable: Runnable): Unit = runnable.run()
+    def reportFailure(cause: Throwable): Unit = cause.printStackTrace()
+  }
   val acc = proto.Account.parseFrom(poo.the_account.toArray)
   val accbytes = acc.toByteArray
-  val accblob = new Blob(accbytes.toJSArray.map(_.asInstanceOf[js.Any]))
+  val accblob = accbytes.castTo[Blob]
+  val accblobinspect: Future[String] =
+    accblob.castTo[Future[Array[Byte]]].map(_.inspect)(asap)
 
   val wsaddr = "ws://localhost:19000/ws"
-  val ws = {
+
+  def toReadyFuture[o](obj: o)(set: (o, Any ⇒ Unit) => Unit): Future[o] = {
+    val p = Promise[o]()
+    set(obj, { _ ⇒ p.success(obj) })
+    p.future
+  }
+
+  def makews: Future[dom.WebSocket] = {
     val ws = new dom.WebSocket(wsaddr)
 
     ws.onerror = ev ⇒ println(s"error: $ev")
 
     ws.onclose = ev ⇒ println(s"close: $ev")
 
-    ws.onmessage = ev ⇒ eventHandler !
-      Saying(ev.data.asInstanceOf[dom.Blob].toString)
-
-    ws.onopen = ev ⇒ {
-      println(s"open: $ev")
-      wsopen.success(())
+    ws.onmessage = ev ⇒ {
+      println(s"message $ev")
+      ev.data.asInstanceOf[dom.Blob]
+        .castTo[Future[Array[Byte]]]
+        .zip(accblobinspect)
+        .map { case (bytes, accblobinspectreal) ⇒
+          //        val acc2 = Account.parseFrom(bytes)
+          eventHandler !
+            Saying(s"a ${bytes.inspect} vs\nb ${accblobinspectreal} vs\nc ${accbytes.inspect}")
+          eventHandler ! Saying(s"$acc")
+            eventHandler ! Saying(s"${Account.parseFrom(accbytes)}")
+            eventHandler ! Saying(s"${Account.parseFrom(bytes)}")
+        }
     }
-    
-    ws
+
+    toReadyFuture(ws)(_.onopen = _)
+  }
+
+  object ws {
+    private[this] var w: Future[dom.WebSocket] = makews
+    implicit def getWS(_ws: ws.type): Future[dom.WebSocket] =
+      w.flatMap(_w ⇒ { w = _w.refresh; w})(asap)
+  }
+
+  final implicit class RefreshingWs(val self: dom.WebSocket) extends AnyVal {
+    def refresh: Future[dom.WebSocket] =
+      if (self.readyState == dom.WebSocket.CLOSED || self.readyState == dom.WebSocket.CLOSING)
+        makews
+      else
+        Future successful self
   }
 
   def setupBody(): Unit = {
     document.body.onclick = _ ⇒
-      wsopen.future.onComplete {
-        case Success(_) ⇒ ws.send(accblob)
-        case Failure(ex) ⇒ eventHandler ! ex
-      }
+      ws
+        .flatMap(_.refresh)
+        .map(_.send(accblob))
+        .recover { case ex ⇒ eventHandler ! Saying(ex.toString) }
   }
 }
 
@@ -131,15 +197,16 @@ object App {
   import utilground.system.dispatcher
 
   def main(args: Array[String]): Unit = {
+    setupBody()
 //    val channel = ManagedChannelBuilder.forAddress("localhost", 18000).build()
 //    val stub = JogaGrpc.stub(channel)
 //    val futureAccountReply = stub.addAccount(acc)
     system.scheduler.scheduleOnce(0 millis) {
       println("Hello lol")
-      eventHandler ! "ready to roll, baby"
-      eventHandler ! Config.toString
-      eventHandler ! s"dis is teh account: ${poo.the_account}"
-      eventHandler ! s"and dis is deserialized: ${acc.toString.inspect}"
+      eventHandler ! Saying("ready to roll, baby")
+      eventHandler ! Saying(Config.toString)
+      eventHandler ! Saying(s"dis is teh account: ${poo.the_account}")
+      eventHandler ! Saying(s"and dis is deserialized: ${acc.toString.inspect}")
 //      Await.result(
 //        futureAccountReply
 //          .map { acc2 ⇒ eventHandler ! s"account reply: ${acc2.toString.inspect}" },
