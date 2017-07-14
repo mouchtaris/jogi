@@ -1,10 +1,9 @@
-package patron
+package isi.store
 
 import isi.convert._
 
 import scala.collection.concurrent.TrieMap
 import scala.concurrent.Future
-import scala.util.Try
 
 trait Repository {
   type Key
@@ -38,10 +37,9 @@ object Repository {
 
     def store(key: Key): Future[Storer] =
       Future successful { value ⇒
-        val opt: Option[Result] = mem.put(key, value).map(_ ⇒ Result.OK)
-        val trie: Try[Result] = opt.convertTo
-        val futu: Future[Result] = trie.convertTo
-        futu
+        mem.put(key, value)
+          .map(_ ⇒ Result.OK)
+          .convertToEffect[Future]
       }
   }
 }

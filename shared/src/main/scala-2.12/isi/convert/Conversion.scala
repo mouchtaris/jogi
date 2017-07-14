@@ -1,6 +1,6 @@
 package isi.convert
 
-trait Conversion[from, to] {
+trait Conversion[-from, +to] {
   def apply(from: from): to
 }
 
