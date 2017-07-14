@@ -7,9 +7,12 @@ import dom.raw.Element
 import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
 import com.typesafe.config.{ Config, ConfigFactory }
 import io.grpc.ManagedChannelBuilder
+import isi.store.Repository.Aux
+import jogi.incubate.{ StdOut, StdStreamer }
 import jogi.proto
 import proto.Account
 import org.scalajs.dom.raw.Blob
+import patron.app.Patron
 
 import scala.concurrent.duration._
 import scala.collection.mutable.ArrayBuffer
@@ -146,12 +149,12 @@ object utilground {
   def makews: Future[dom.WebSocket] = {
     val ws = new dom.WebSocket(wsaddr)
 
-    ws.onerror = ev ⇒ println(s"error: $ev")
+    ws.onerror = ev ⇒ streamer ! StdOut(s"error: $ev")
 
-    ws.onclose = ev ⇒ println(s"close: $ev")
+    ws.onclose = ev ⇒ streamer ! StdOut(s"close: $ev")
 
     ws.onmessage = ev ⇒ {
-      println(s"message $ev")
+      streamer ! StdOut(s"message $ev")
       ev.data.asInstanceOf[dom.Blob]
         .castTo[Future[Array[Byte]]]
         .zip(accblobinspect)
@@ -190,6 +193,8 @@ object utilground {
         .map(_.send(accblob))
         .recover { case ex ⇒ eventHandler ! Saying(ex.toString) }
   }
+
+  val streamer: ActorRef = system actorOf Props[StdStreamer]
 }
 
 object App {
@@ -198,11 +203,22 @@ object App {
 
   def main(args: Array[String]): Unit = {
     setupBody()
+    val pat = new Patron {
+      override implicit val executionContext: ExecutionContext = ExecutionContext.global
+      override val accountRepo: Aux[String, patron.model.Account] = isi.store.cross.js.InMemory()
+    }
+    pat.addAccount(patron.model.Account(
+      email = Some(patron.model.Email(value = "vbob@vsponge.com"))
+    )).onComplete {
+      case Success(v)  ⇒ eventHandler ! Saying(s"account created (maybe): $v")
+      case Failure(ex) ⇒ ex.printStackTrace(); eventHandler ! Saying(s" account created poop: ${ex}")
+    }
+
     //    val channel = ManagedChannelBuilder.forAddress("localhost", 18000).build()
     //    val stub = JogaGrpc.stub(channel)
     //    val futureAccountReply = stub.addAccount(acc)
     system.scheduler.scheduleOnce(0 millis) {
-      println("Hello lol")
+      streamer ! StdOut("Hello lol")
       eventHandler ! Saying("ready to roll, baby")
       eventHandler ! Saying(Config.toString)
       eventHandler ! Saying(s"dis is teh account: ${poo.the_account}")

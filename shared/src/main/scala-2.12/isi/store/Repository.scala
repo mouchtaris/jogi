@@ -25,21 +25,8 @@ trait Repository {
 }
 
 object Repository {
-
-  final case class InMemory[K, V]() extends Repository {
-    type Key = K
-    type Value = V
-
-    private[this] final val mem = TrieMap[K, V]()
-
-    def apply(key: Key): Future[Value] =
-      (mem get key).convertTo[Future[Value]]
-
-    def store(key: Key): Future[Storer] =
-      Future successful { value ⇒
-        mem.put(key, value)
-          .map(_ ⇒ Result.OK)
-          .convertToEffect[Future]
-      }
+  type Aux[k, v] = Repository {
+    type Key = k
+    type Value = v
   }
 }
