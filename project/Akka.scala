@@ -37,7 +37,10 @@ object Akka {
 
     object packages {
       val actor = "akkajsactor"
-      lazy val all = Seq(actor)
+      val stream = "akkajsactorstream"
+      val streamtestkit = "akkajsstreamtestkit"
+      val actortestkit = "akkajstestkit"
+      lazy val all = Seq(actor, stream, streamtestkit, actortestkit)
     }
 
     lazy val config = Seq(
@@ -52,7 +55,10 @@ object Akka {
       val actor = "actor"
       val testkit = "testkit"
       val remote = "remote"
-      lazy val all = Seq(actor, testkit, remote)
+      val slf4j = "slf4j"
+      val stream = "stream"
+      val streamtestkit = "stream-testkit"
+      lazy val all = Seq(actor, testkit, remote, slf4j, stream, streamtestkit)
     }
 
     lazy val deps = packages.all.map(akkaModuleId).map(org %% _ % version)

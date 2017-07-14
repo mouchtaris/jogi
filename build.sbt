@@ -5,16 +5,14 @@ lazy val root = (project in file("."))
 
 lazy val jogi = crossProject.in(file("."))
   .settings(Project.config)
-  .settings(ScalacOptions.standard)
-  .settings(ScalacOptions.inConsole)
-  .settings(ScalacOptions.inDoc)
-  .settings(ScalacOptions.inDocSettings)
-  .settings(ScalaJS.config)
-  .jsSettings(ScalaJS.jsconfig)
+  .settings {
+    import ScalacOptions._
+    standard ++ inConsole ++ inDoc ++ inDocSettings
+  }
+  .settings(ScalaJS.config).jsSettings(ScalaJS.jsconfig)
   .settings(ScalaPB.config)
-  .jsSettings(Akka.js.config: _*)
-  .jvmSettings(Akka.config: _*)
-  .jvmSettings(TypesafeConfig.config: _*)
+  .jvmSettings(Akka.config).jsSettings(Akka.js.config)
+  .jvmSettings(TypesafeConfig.config)
 //    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
 
 lazy val jogiJS = jogi.js
