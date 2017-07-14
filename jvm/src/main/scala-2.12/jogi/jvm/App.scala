@@ -5,25 +5,25 @@ import java.io.FileOutputStream
 import akka.NotUsed
 import akka.Done
 
-import scala.concurrent.{duration, Await, ExecutionContext, Future}
+import scala.concurrent.{ duration, Await, ExecutionContext, Future }
 import duration._
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-import com.typesafe.config.{Config, ConfigFactory}
+import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
+import com.typesafe.config.{ Config, ConfigFactory }
 import io.grpc.ServerBuilder
 import incubate._
-import akka.http.scaladsl.{model, server, Http}
+import akka.http.scaladsl.{ model, server, Http }
 import server._
 import Directives._
-import model.ws.{BinaryMessage, Message}
-import akka.stream.{scaladsl, ActorMaterializer}
-import scaladsl.{Flow, Keep, Sink, Source}
+import model.ws.{ BinaryMessage, Message }
+import akka.stream.{ scaladsl, ActorMaterializer }
+import scaladsl.{ Flow, Keep, Sink, Source }
 import akka.util.ByteString
 
 import scala.concurrent.Promise
 
 object App {
 
-  final case class Complete(a: a forSome {type a})
+  final case class Complete(a: a forSome { type a })
 
   final class Completer extends Actor {
     def receive: Receive = {
@@ -93,9 +93,9 @@ object App {
 
     val messageHandler: Message ⇒ Source[Message, NotUsed] =
       _.asBinaryMessage.asScala.dataStream
-      .fold(ByteString())(_ ++ _)
-      .map(BinaryMessage.apply)
-      .mapMaterializedValue(_ ⇒ NotUsed)
+        .fold(ByteString())(_ ++ _)
+        .map(BinaryMessage.apply)
+        .mapMaterializedValue(_ ⇒ NotUsed)
 
     val wsHandler: Flow[Message, Message, _] = Flow[Message]
       .flatMapConcat(messageHandler)

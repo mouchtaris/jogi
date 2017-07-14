@@ -13,6 +13,7 @@ lazy val jogi = crossProject.in(file("."))
   .settings(ScalaPB.config)
   .jvmSettings(Akka.config).jsSettings(Akka.js.config)
   .jvmSettings(TypesafeConfig.config)
+  .settings(Scalariform.config)
 //    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
 
 lazy val jogiJS = jogi.js

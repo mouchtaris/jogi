@@ -7,7 +7,7 @@ import scala.collection.concurrent.TrieMap
 
 class Accountant extends Actor {
 
-//  val accounts: TrieMap[Int, proto.Account] = TrieMap()
+  //  val accounts: TrieMap[Int, proto.Account] = TrieMap()
 
   def receive: Receive = {
     case _ ⇒ throw new Exception()

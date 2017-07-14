@@ -1,11 +1,11 @@
 package jogi.js
 
-import scala.language.{implicitConversions, postfixOps}
+import scala.language.{ implicitConversions, postfixOps }
 import org.scalajs.dom
 import dom.document
 import dom.raw.Element
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
-import com.typesafe.config.{Config, ConfigFactory}
+import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
+import com.typesafe.config.{ Config, ConfigFactory }
 import io.grpc.ManagedChannelBuilder
 import jogi.proto
 import proto.Account
@@ -13,7 +13,7 @@ import org.scalajs.dom.raw.Blob
 
 import scala.concurrent.duration._
 import scala.collection.mutable.ArrayBuffer
-import scala.concurrent.{Await, ExecutionContext, Future}
+import scala.concurrent.{ Await, ExecutionContext, Future }
 import scala.concurrent.Promise
 import scala.util.Success
 import scala.util.Failure
@@ -52,10 +52,9 @@ object utilground {
     def applyTo[b](f: a ⇒ b): () ⇒ b = () ⇒ f(self)
   }
 
-
   implicit def blobToByteArray(blob: Blob)(
-      implicit
-      ec: ExecutionContext
+    implicit
+    ec: ExecutionContext
   ): Future[Array[Byte]] = {
     val reader = new dom.FileReader
     reader.readAsArrayBuffer(blob)
@@ -119,7 +118,7 @@ object utilground {
 
   implicit class stringpimp(val self: String) extends AnyVal {
     def inspect: String = self
-          .replaceAll("\\n", "\\\\n")
+      .replaceAll("\\n", "\\\\n")
   }
 
   implicit val system: ActorSystem = ActorSystem("Bols", Config)
@@ -138,7 +137,7 @@ object utilground {
 
   val wsaddr = "ws://localhost:19000/ws"
 
-  def toReadyFuture[o](obj: o)(set: (o, Any ⇒ Unit) => Unit): Future[o] = {
+  def toReadyFuture[o](obj: o)(set: (o, Any ⇒ Unit) ⇒ Unit): Future[o] = {
     val p = Promise[o]()
     set(obj, { _ ⇒ p.success(obj) })
     p.future
@@ -156,11 +155,12 @@ object utilground {
       ev.data.asInstanceOf[dom.Blob]
         .castTo[Future[Array[Byte]]]
         .zip(accblobinspect)
-        .map { case (bytes, accblobinspectreal) ⇒
-          //        val acc2 = Account.parseFrom(bytes)
-          eventHandler !
-            Saying(s"a ${bytes.inspect} vs\nb ${accblobinspectreal} vs\nc ${accbytes.inspect}")
-          eventHandler ! Saying(s"$acc")
+        .map {
+          case (bytes, accblobinspectreal) ⇒
+            //        val acc2 = Account.parseFrom(bytes)
+            eventHandler !
+              Saying(s"a ${bytes.inspect} vs\nb ${accblobinspectreal} vs\nc ${accbytes.inspect}")
+            eventHandler ! Saying(s"$acc")
             eventHandler ! Saying(s"${Account.parseFrom(accbytes)}")
             eventHandler ! Saying(s"${Account.parseFrom(bytes)}")
         }
@@ -172,7 +172,7 @@ object utilground {
   object ws {
     private[this] var w: Future[dom.WebSocket] = makews
     implicit def getWS(_ws: ws.type): Future[dom.WebSocket] =
-      w.flatMap(_w ⇒ { w = _w.refresh; w})(asap)
+      w.flatMap(_w ⇒ { w = _w.refresh; w })(asap)
   }
 
   final implicit class RefreshingWs(val self: dom.WebSocket) extends AnyVal {
@@ -198,20 +198,20 @@ object App {
 
   def main(args: Array[String]): Unit = {
     setupBody()
-//    val channel = ManagedChannelBuilder.forAddress("localhost", 18000).build()
-//    val stub = JogaGrpc.stub(channel)
-//    val futureAccountReply = stub.addAccount(acc)
+    //    val channel = ManagedChannelBuilder.forAddress("localhost", 18000).build()
+    //    val stub = JogaGrpc.stub(channel)
+    //    val futureAccountReply = stub.addAccount(acc)
     system.scheduler.scheduleOnce(0 millis) {
       println("Hello lol")
       eventHandler ! Saying("ready to roll, baby")
       eventHandler ! Saying(Config.toString)
       eventHandler ! Saying(s"dis is teh account: ${poo.the_account}")
       eventHandler ! Saying(s"and dis is deserialized: ${acc.toString.inspect}")
-//      Await.result(
-//        futureAccountReply
-//          .map { acc2 ⇒ eventHandler ! s"account reply: ${acc2.toString.inspect}" },
-//        10 seconds
-//      )
+      //      Await.result(
+      //        futureAccountReply
+      //          .map { acc2 ⇒ eventHandler ! s"account reply: ${acc2.toString.inspect}" },
+      //        10 seconds
+      //      )
     }
   }
 }
