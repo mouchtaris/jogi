@@ -1,0 +1,29 @@
+// vim: et ts=2 sw=2
+syntax = "proto3";
+
+package patron;
+
+//
+// General Semantic Types
+//
+message Email {
+  string value = 1;
+}
+
+//
+// Account Management
+//
+// @path    /account
+//
+message Account {
+  Email email = 1;
+}
+
+message CreateAccount {
+  Account account = 1;
+}
+
+message DisableAccount {
+  Email email = 1;
+}
+
