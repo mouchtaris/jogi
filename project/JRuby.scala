@@ -11,7 +11,7 @@ object JRuby {
   }
 
   final val config = Seq(
-    libraryDependencies ++= artifacts.all map (ORG %% _ % VERSION)
+    libraryDependencies ++= artifacts.all map (ORG % _ % VERSION)
   )
 
 }

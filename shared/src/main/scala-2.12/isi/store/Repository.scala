@@ -1,8 +1,5 @@
 package isi.store
 
-import isi.convert._
-
-import scala.collection.concurrent.TrieMap
 import scala.concurrent.Future
 
 trait Repository {
@@ -11,9 +8,9 @@ trait Repository {
 
   trait Result
 
-  final case object Result {
+  final object Result {
     final case object OK extends Result
-    final case class Error(msg: String, cause: Throwable) extends Exception(msg, cause)
+    case class Error(msg: String, cause: Throwable) extends Exception(msg, cause)
   }
 
   trait Storer {
