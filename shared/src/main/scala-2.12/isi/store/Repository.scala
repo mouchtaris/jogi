@@ -18,7 +18,7 @@ trait Repository {
   }
 
   def apply(key: Key): Future[Value]
-  def store(key: Key): Future[Storer]
+  def store(key: Key): Storer
 }
 
 object Repository {
