@@ -6,19 +6,23 @@ trait Repository {
   type Key
   type Value
 
-  trait Result
+  sealed trait Result
 
   final object Result {
     final case object OK extends Result
     case class Error(msg: String, cause: Throwable) extends Exception(msg, cause)
   }
 
-  trait Storer {
-    def apply(value: Value): Future[Result]
-  }
-
   def apply(key: Key): Future[Value]
-  def store(key: Key): Storer
+  def update(key: Key, value: Value): Future[Result]
+
+  //
+  // Aliases
+  //
+  @inline final def get(key: Key): Future[Value] = this(key)
+  final case object set {
+    @inline def update(key: Key, value: Value): Future[Result] = Repository.this(key) = value
+  }
 }
 
 object Repository {

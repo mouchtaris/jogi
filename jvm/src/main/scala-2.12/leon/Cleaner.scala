@@ -1,6 +1,6 @@
 package leon
 
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{ Files, Path, Paths }
 import java.io.File
 
 import scala.language.postfixOps
@@ -13,8 +13,8 @@ import isi.tap._
 import Cleaner._
 
 final case class Cleaner(
-  errorIn: String = samplein,
-  root: Path = Paths get "/host/vbshare/_leon/arch"
+    errorIn: String = samplein,
+    root:    Path   = Paths get "/host/vbshare/_leon/arch"
 ) {
 
   val Error = raw"\s*::\s*File (.*) is corrupted".r.unanchored
@@ -23,12 +23,11 @@ final case class Cleaner(
   lazy val errors: Set[Path] =
     Error findAllMatchIn errorIn map (_ group 1) map (Paths get _) map (_ getFileName) toSet
 
-
   val index: Path =
     root resolve "human_index"
 
   val indexFiles: Array[Path] =
-    index toFile() list() map (index resolve _)
+    index toFile () list () map (index resolve _)
 
   val converterArgv: Array[String] =
     indexFiles map (_ toString)
@@ -44,13 +43,13 @@ final case class Cleaner(
   }
 
   val json: JsObject =
-    jsonString.parseJson asJsObject()
+    jsonString.parseJson asJsObject ()
 
   val entries: Map[Path, Path] =
     json.fields map {
       case (pathName, JsArray(values)) ⇒
-        val path = root resolve (Paths get pathName getFileName()) normalize()
-        val `package` = Paths get values.last.convertTo[String] normalize()
+        val path = root resolve (Paths get pathName getFileName ()) normalize ()
+        val `package` = Paths get values.last.convertTo[String] normalize ()
         (path, `package`)
 
       case (pathname, json) ⇒
@@ -66,7 +65,7 @@ final case class Cleaner(
     import Console.{ RED, GREEN, CYAN, RESET }
     errorEntries foreach {
       case (path, pack) ⇒
-        val file = path toFile()
+        val file = path toFile ()
         print(s"deleting $CYAN$pack$RESET (${if (file.exists) "found" else s"not found: $path"})")
         val result = file.delete()
         println(if (result) s"$GREEN OK$RESET" else s"$RED FAIL$RESET")
@@ -75,8 +74,8 @@ final case class Cleaner(
 
 }
 
-object main{
-  def main(args:Array[String]):Unit=Main main args
+object main {
+  def main(args: Array[String]): Unit = Main main args
 }
 
 object Cleaner {

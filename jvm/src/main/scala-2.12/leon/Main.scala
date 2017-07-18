@@ -6,10 +6,9 @@ object Main {
 
     val cleaner = Cleaner()
 
-    cleaner deleteErrors()
-//    println(cleaner.errors)
-//    println(cleaner.errorEntries)
+    cleaner deleteErrors ()
+    //    println(cleaner.errors)
+    //    println(cleaner.errorEntries)
   }
-
 
 }

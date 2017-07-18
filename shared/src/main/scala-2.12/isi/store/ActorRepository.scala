@@ -3,7 +3,7 @@ package isi.store
 import java.util.concurrent.TimeUnit.SECONDS
 
 import akka.actor.Status.Failure
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor.{ Actor, ActorRef, ActorSystem, Props }
 import akka.pattern.ask
 import akka.util.Timeout
 
@@ -11,7 +11,7 @@ import scala.collection.mutable
 import scala.concurrent.Future
 import scala.reflect.ClassTag
 
-final class ActorRepository[k, v: ClassTag](system: ActorSystem) extends Repository {
+final class ActorRepository[k, v: ClassTag](implicit system: ActorSystem) extends Repository {
 
   private[this] case class Store(k: k, v: v)
   private[this] case class Retrieve(k: k)
@@ -27,7 +27,7 @@ final class ActorRepository[k, v: ClassTag](system: ActorSystem) extends Reposit
       case Retrieve(k) ⇒
         mem get k match {
           case Some(v) ⇒ sender() ! v
-          case None ⇒ sender() ! Failure(new NoSuchElementException(k.toString))
+          case None    ⇒ sender() ! Failure(new NoSuchElementException(k.toString))
         }
     }
   }
@@ -41,7 +41,7 @@ final class ActorRepository[k, v: ClassTag](system: ActorSystem) extends Reposit
 
   def apply(k: k): Future[v] = (back ? Retrieve(k)).mapTo[v]
 
-  def store(k: k): Storer = value ⇒
-    (back ? Store(k, value)).mapTo[Result]
+  def update(k: k, v: v): Future[Result] =
+    (back ? Store(k, v)).mapTo[Result]
 
 }

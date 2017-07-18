@@ -16,6 +16,7 @@ lazy val jogi = crossProject.in(file("."))
   .settings(Scalariform.config)
   .jvmSettings(SprayJson.config)
   .jvmSettings(JRuby.config)
+  .jvmSettings(Slick.config)
 //    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
 
 lazy val jogiJS = jogi.js
