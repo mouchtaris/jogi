@@ -1,0 +1,21 @@
+#!/bin/bash
+
+true &&
+dbdir=/mem/jogi.db &&
+dbuser=postgres &&
+{
+    sudo -u $dbuser pg_ctl -D $dbdir stop
+    sudo -u $dbuser rm -rfv $dbdir
+    true
+} &&
+sudo -u $dbuser pg_ctl -D $dbdir init &&
+if [ \! -d /run/postgresql ]; then sudo mkdir /run/postgresql ; fi &&
+sudo chown $dbuser:$dbuser -R -v /run/postgresql/ &&
+sudo -u $dbuser pg_ctl -D $dbdir start &&
+
+sudo -u $dbuser createuser jogi &&
+sudo -u $dbuser createdb --owner=jogi jogi &&
+
+true
+
+# vim: et ts=4 sw=4
