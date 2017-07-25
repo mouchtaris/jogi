@@ -9,7 +9,8 @@ object Slick {
   object artifacts {
     val slick = "slick"
     val hikari = "slick-hikaricp"
-    val all = Seq(slick, hikari)
+    val codegen = "slick-codegen"
+    val all = Seq(slick, hikari, codegen)
   }
 
   val config = Seq(
