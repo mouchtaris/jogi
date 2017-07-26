@@ -1,7 +1,5 @@
 package patron.db
 
-import slick.jdbc.JdbcProfile
-
 trait Database {
   val tables: schema.traditional.Tables
 

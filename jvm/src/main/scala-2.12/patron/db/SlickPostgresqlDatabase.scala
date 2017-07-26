@@ -3,6 +3,7 @@ package patron.db
 import patron.db.schema.traditional.Tables
 
 class SlickPostgresqlDatabase(
+  confName:   String,
   val tables: Tables = Tables
 )
     extends Database {
@@ -14,7 +15,7 @@ class SlickPostgresqlDatabase(
   val jdbcDriver: String = jdbcDriverClass getName
 
   val conn: api.Database = {
-    Class forName jdbcDriver
-    api.Database.forURL("jdbc:postgresql:pat?user=pat&pass=pat")
+    Class forName jdbcDriver // load jdbcDriver
+    api.Database forConfig confName
   }
 }

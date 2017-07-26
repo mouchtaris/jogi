@@ -15,7 +15,7 @@ object SlickGenerator {
    * </pre>
    */
   def main(args: Array[String]): Unit = {
-    val database = new SlickPostgresqlDatabase
+    val database = new SlickPostgresqlDatabase(args(0))
     val profile: String = database.slickProfile
     val jdbcDriver: String = database.jdbcDriver
     val user = "pat"

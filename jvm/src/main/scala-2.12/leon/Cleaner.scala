@@ -1,16 +1,14 @@
 package leon
 
-import java.nio.file.{ Files, Path, Paths }
-import java.io.File
-
-import scala.language.postfixOps
-
-import org.jruby.embed.ScriptingContainer
-import spray.json._, DefaultJsonProtocol._
+import java.nio.file.{ Path, Paths }
 
 import isi.tap._
+import leon.Cleaner._
+import org.jruby.embed.ScriptingContainer
+import spray.json.DefaultJsonProtocol._
+import spray.json._
 
-import Cleaner._
+import scala.language.postfixOps
 
 final case class Cleaner(
     errorIn: String = samplein,
@@ -62,7 +60,7 @@ final case class Cleaner(
     }
 
   def deleteErrors(): Unit = {
-    import Console.{ RED, GREEN, CYAN, RESET }
+    import Console.{ CYAN, GREEN, RED, RESET }
     errorEntries foreach {
       case (path, pack) ⇒
         val file = path toFile ()
@@ -72,10 +70,6 @@ final case class Cleaner(
     }
   }
 
-}
-
-object main {
-  def main(args: Array[String]): Unit = Main main args
 }
 
 object Cleaner {

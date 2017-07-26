@@ -2,10 +2,8 @@ package patron
 
 import akka.actor.ActorSystem
 import isi.store.{ ActorRepository, Repository }
-import isi.ClassTag._
 
 import scala.collection.mutable
-import scala.concurrent.Future
 import scala.reflect.ClassTag
 
 final class Repo(implicit system: ActorSystem) {
