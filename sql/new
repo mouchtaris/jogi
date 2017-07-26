@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+name=$1; shift;
+
+function _error () {
+  printf '%s' "$*" 2>&1 
+  exit 1
+}
+
+if [ -z "$name" ]; then
+  _error argv[1] = name
+fi
+
+timestamp="$( date +'%Y%m%d%H%M%S' )"
+
+touch sql/$timestamp-$name.sql
+
+# vim: et ts=2 sw=2
