@@ -13,6 +13,7 @@ if [ \! -d /run/postgresql ]; then sudo mkdir /run/postgresql ; fi &&
 sudo chown $dbuser:$dbuser -R -v /run/postgresql/ &&
 sudo -u $dbuser pg_ctl -D $dbdir start &&
 
+sleep 3 && 
 sudo -u $dbuser createuser jogi &&
 sudo -u $dbuser createdb --owner=jogi jogi &&
 

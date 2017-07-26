@@ -5,10 +5,10 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 import akka.actor.ActorSystem
 
-import scala.concurrent.Await
+import scala.concurrent.{ Await, Future }
 import scala.concurrent.duration.Duration
-// Use H2Profile to connect to an H2 database
-import slick.jdbc.H2Profile.api._
+import scala.language.postfixOps
+import slick.jdbc.PostgresProfile.{ api ⇒ db }
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -21,32 +21,44 @@ object test {
 
   final case class Point(x: Int, y: Int)
 
-  def main(args: Array[String]): Unit = {
-    class Bob(tag: Tag) extends Table[(Long, String)](tag, "accounts") {
-      def id = column[Long]("id", O.PrimaryKey)
-      def email = column[String]("email")
-      def * = (id, email)
+  object schema {
+    import db._
+    class Account(tag: Tag) extends Table[Tuple1[String]](tag, "accounts") {
+      def email = column[String]("email", O.PrimaryKey)
+      def * = Tuple1(email)
     }
-    val accounts = TableQuery[Bob]
-    val setup = DBIO.seq(
-      accounts += ((1, "bob@sponge.com")),
-      accounts += ((2, "sponge@bob.com"))
-    )
+    val accounts = db.TableQuery[Account]
+  }
+
+  def main(args: Array[String]): Unit = {
+    Class.forName("org.postgresql.Driver")
+    val setup = {
+      import db._
+      db.DBIO.seq(
+        schema.accounts += Tuple1("bob@sponge.vom")
+      //      schema.Accounts += ("com@sponge.bob")
+      )
+    }
 
     val m = Main()
     import m.repo.{ apply ⇒ DB }
     import scala.concurrent.ExecutionContext.Implicits.global
 
-    val db = Database.forURL("jdbc:postgresql:jogi")
-    val setupComplete = db.run(setup)
+    val dbconn = db.Database.forURL("jdbc:postgresql:jogi?user=jogi")
+    val setupComplete = dbconn.run(setup)
+    def term0 = m.system.terminate()
+    def term1 = Future { dbconn close }
+    def terms = term0 zip term1
 
     val awesome = for {
       _ ← DB[Point].set(12) = Point(21, 14)
       v ← DB[Point] get 12
       _ ← setupComplete
-      _ ← m.system.terminate()
     } yield println(v)
-    awesome.failed.foreach { e ⇒ println(s"bollocked $e") }
+
+    val wait = awesome flatMap (_ ⇒ terms) recoverWith { case _ ⇒ terms } map (_ ⇒ ())
+
+    wait.failed.foreach { e ⇒ println(s"bollocked $e") }
     Await.result(awesome, Duration(1, SECONDS))
   }
 
