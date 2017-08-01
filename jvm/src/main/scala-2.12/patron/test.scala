@@ -2,25 +2,35 @@ package patron
 
 import java.util.concurrent.TimeUnit.SECONDS
 
+import akka.actor.ActorSystem
+import akka.stream.{ ActorMaterializer, Materializer }
+import com.typesafe.config.ConfigFactory
+
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
 object test {
 
   def main(args: Array[String]): Unit = {
-    import patron.db.SlickPostgresqlDatabase
-    val db = new SlickPostgresqlDatabase("pat")
+    import patron.db.PostgresqlSlickDatabase
+    val conf = ConfigFactory.defaultApplication
+    val db = new PostgresqlSlickDatabase(conf = conf, jdbcUrlConfPath = "db.pat.staging")
+    implicit val system: ActorSystem = ActorSystem("test")
+    implicit val materializer: Materializer = ActorMaterializer()
+    val server = new http.server.Server
     try {
       import db.api._
 
       val q0 = db.tables.Users.take(1).map(u ⇒ (u.email, u.invitedEmails, u.invitePassword)).result
       val f0 = db.conn run q0
 
-      val users = Await result (f0, Duration(1, SECONDS))
+      val users = Await result (f0, Duration(10, SECONDS))
       val user = users.head
       println(user)
     }
-    finally db.conn.close()
+    finally {
+      db.conn.close()
+    }
   }
 
 }

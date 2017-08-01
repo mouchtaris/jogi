@@ -15,18 +15,18 @@ object SlickGenerator {
    * </pre>
    */
   def main(args: Array[String]): Unit = {
-    val database = new SlickPostgresqlDatabase(args(0))
-    val profile: String = database.slickProfile
-    val jdbcDriver: String = database.jdbcDriver
-    val user = "pat"
-    val password = "pat"
-    val url = "jdbc:postgresql:pat"
-    val outputFolder = "/home/nikos/op/poli/jogi-js/jvm/src/main/scala-2.12/"
-    val pkg = "patron.db.schema.traditional"
-
-    slick.codegen.SourceCodeGenerator.main(
-      Array(profile, jdbcDriver, url, outputFolder, pkg, user, password)
-    )
+    //    val database = new SlickPostgresqlDatabase(args(0))
+    //    val profile: String = database.slickProfile
+    //    val jdbcDriver: String = database.jdbcDriver
+    //    val user = "pat"
+    //    val password = "pat"
+    //    val url = "jdbc:postgresql:pat"
+    //    val outputFolder = "/home/nikos/op/poli/jogi-js/jvm/src/main/scala-2.12/"
+    //    val pkg = "patron.db.schema.traditional"
+    //
+    //    slick.codegen.SourceCodeGenerator.main(
+    //      Array(profile, jdbcDriver, url, outputFolder, pkg, user, password)
+    //    )
 
   }
 

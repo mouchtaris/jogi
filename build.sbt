@@ -19,6 +19,8 @@ lazy val jogi = crossProject.in(file("."))
   .jvmSettings(Slick.config)
   .jvmSettings(H2.config)
   .jvmSettings(Postgresql.config)
+  .jvmSettings(Scalaz.config)
+  .jvmSettings(Shapeless.config)
 //    libraryDependencies += "org.scala-js" %% "scalajs-stubs" % scalaJSVersion % "provided"
 
 lazy val jogiJS = jogi.js
