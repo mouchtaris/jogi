@@ -3,7 +3,8 @@ package patron
 import java.util.concurrent.TimeUnit.SECONDS
 
 import akka.actor.ActorSystem
-import akka.stream.{ ActorMaterializer, Materializer }
+import akka.http.scaladsl.model.Uri
+import akka.stream.{ActorMaterializer, Materializer}
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.Await
@@ -12,6 +13,10 @@ import scala.concurrent.duration.Duration
 object test {
 
   def main(args: Array[String]): Unit = {
+    val command = action.Unknown(Uri("https://www.lol.com/lol/lol"))
+    val logger = log.StdoutLogger()
+    logger.log(command)
+//    return ()
     import patron.db.PostgresqlSlickDatabase
     val conf = ConfigFactory.defaultApplication
     val db = new PostgresqlSlickDatabase(conf = conf, jdbcUrlConfPath = "db.pat.staging")
