@@ -13,7 +13,7 @@ object Incubate {
 
     trait ListMap[f[_], r <: Record] { type out <: Record }
     object ListMap {
-      private[this] final object instance extends ListMap[known, Nil] { type out = known[Nil] }
+      private[this] final object instance extends ListMap[Known, Nil] { type out = Known[Nil] }
       type aux[f[_], r <: Record, a <: Record] = ListMap[f, r] { type out = a }
       def apply[f[_], r <: Record, a <: Record](): ListMap.aux[f, r, a] = instance.asInstanceOf[ListMap.aux[f, r, a]]
       implicit def nilListMap[f[_], h]: ListMap.aux[f, h :: Nil, f[h] :: Nil] = ListMap()

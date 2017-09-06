@@ -5,7 +5,7 @@ trait Lub[r <: Record] { type Out }
 object Lub {
 
   type Aux[r <: Record, u] = Lub[r] { type Out = u }
-  type Of[r <: Record] = { type t[u] = Aux[r, u] }
+  type Of[r <: Record] = { type is[u] = Aux[r, u] }
 
   private[this] final object instance extends Lub[Nil] { type Out = Nothing }
 
@@ -15,10 +15,7 @@ object Lub {
   @inline implicit def nilLub[h]: Lub.Aux[h :: Nil, h] =
     Lub()
 
-  implicit def listLub[h, t <: Record, tu: Of[t]#t](
-    implicit
-    hlub: fun.lub.Lub[h, tu]
-  ): Lub.Aux[h :: t, hlub.Out] =
+  implicit def listLub[h, t <: Record, tu: Lub.Of[t]#is](implicit hlub: fun.lub.Lub[h, tu]): Lub.Aux[h :: t, hlub.Out] =
     Lub()
 
 }

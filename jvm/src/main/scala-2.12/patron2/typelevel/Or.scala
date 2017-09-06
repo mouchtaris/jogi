@@ -4,10 +4,12 @@ trait Or[+a, +b]
 
 object Or extends Ors {
 
-  private[this] final case object instance extends Or[Nothing, Nothing]
+  private[this] final case object Instance extends Or[Nothing, Nothing]
 
-  def apply[a, b](): Or[a, b] = instance.asInstanceOf[Or[a, b]]
+  @inline def apply[a, b](): Or[a, b] =
+    Instance.asInstanceOf[Or[a, b]]
 
-  def apply[a, b](implicit or: Or[a, b]): or.type = or
+  @inline def apply[a, b](implicit or: Or[a, b]): or.type =
+    or
 
 }

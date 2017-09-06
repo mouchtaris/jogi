@@ -2,6 +2,6 @@ package patron2
 
 package object typelevel {
 
-  type known[t] = t
+  type Known[t] = t
 
 }

@@ -1,5 +1,8 @@
 package patron2.typelevel
 
 trait OrA extends OrB {
-  final implicit def orA[a: known, b]: Or[a, b] = Or()
+
+  @inline final implicit def orA[a: Known, b]: Or[a, b] =
+    Or()
+
 }
