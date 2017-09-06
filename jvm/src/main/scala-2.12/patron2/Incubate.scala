@@ -4,26 +4,16 @@ import predef._
 object Incubate {
 
   object record {
-    import patron2.record._
+    import patron2.record.{ Nil, _ }
 
     import patron2.typelevel._
     import typelevel._
 
-    trait ListFold[f[_, _], r <: Record]
+    trait Contains[r <: Record, t]
 
-    trait ListMap[f[_], r <: Record] { type out <: Record }
-    object ListMap {
-      private[this] final object instance extends ListMap[Known, Nil] { type out = Known[Nil] }
-      type aux[f[_], r <: Record, a <: Record] = ListMap[f, r] { type out = a }
-      def apply[f[_], r <: Record, a <: Record](): ListMap.aux[f, r, a] = instance.asInstanceOf[ListMap.aux[f, r, a]]
-      implicit def nilListMap[f[_], h]: ListMap.aux[f, h :: Nil, f[h] :: Nil] = ListMap()
-      implicit def listListMap[f[_], h, t <: Record](implicit tmap: ListMap[f, t]): ListMap.aux[f, h :: t, f[h] :: tmap.out] = ListMap()
+    object Contains {
 
-      final class Applier[f[_]] {
-        def apply[r <: Record](r: r)(implicit map: ListMap[f, r]): map.type = map
-      }
-      def apply[f[_]]: Applier[f] = new Applier()
-      def apply[f[_], r <: Record](implicit map: ListMap[f, r]): map.type = map
+      private[this] final object Instance extends Contains[Nil, Nil]
     }
   }
 
