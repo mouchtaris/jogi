@@ -8,7 +8,6 @@ object Incubate {
 
     import patron2.typelevel._
     import typelevel._
-
   }
 
   object patron3 {

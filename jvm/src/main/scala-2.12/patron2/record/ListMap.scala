@@ -12,8 +12,8 @@ object ListMap {
     type Out = Known[Nil]
   }
 
-  type Aux[f[_], r <: Record, a <: Record] = ListMap[f, r] {
-    type Out = a
+  type Aux[f[_], r <: Record, out <: Record] = ListMap[f, r] {
+    type Out = out
   }
 
   @inline def apply[f[_], r <: Record, a <: Record](): ListMap.Aux[f, r, a] =
