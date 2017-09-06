@@ -7,8 +7,8 @@ package object record {
     type b
   }
 
-  type `1-1`[a <: Record, b <: Record] = rel_1_to_1[a, b]
-  type `1-n`[a <: Record, b <: Record] = rel_1_to_n[a, b]
-  type `n-n`[a <: Record, b <: Record] = rel_n_to_n[a, b]
+  type `1-1`[a <: Record, b <: Record] = Rel1To1[a, b]
+  type `1-n`[a <: Record, b <: Record] = Rel1ToN[a, b]
+  type `n-n`[a <: Record, b <: Record] = RelNToN[a, b]
 
 }
