@@ -19,13 +19,13 @@ object ToCol {
       def apply(nil: nil): col[t] = cbf().result
     }
 
-//  class ForList0(val self: Int) extends AnyVal
+  //  class ForList0(val self: Int) extends AnyVal
 
   implicit def forList[h, t <: List, col[_]](implicit tailToCol: ToCol[t, col]) = ???
 
-//  implicit class ops[l <: List](val self: l) extends AnyVal {
-//    def to[col[_]](implicit tocol: ToCol[l, col]): col[tocol.Out] = tocol(self)
-//  }
+  //  implicit class ops[l <: List](val self: l) extends AnyVal {
+  //    def to[col[_]](implicit tocol: ToCol[l, col]): col[tocol.Out] = tocol(self)
+  //  }
   class why(val self: Int) extends AnyVal
 
 }

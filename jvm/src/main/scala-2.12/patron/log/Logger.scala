@@ -1,6 +1,6 @@
 package patron.log
 
-import patron.{Command, CommandDescription}
+import patron.{ Command, CommandDescription }
 
 import scala.concurrent.Future
 

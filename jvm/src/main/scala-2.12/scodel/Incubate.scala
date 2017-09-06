@@ -3,7 +3,7 @@ package scodel
 import shapeless.ops.tuple.ToTraversable
 
 import scala.reflect.ClassTag
-import shapeless.{::, HList, HNil, Lub, poly}
+import shapeless.{ ::, HList, HNil, Lub, poly }
 
 import scala.annotation.tailrec
 
@@ -22,7 +22,7 @@ trait Incubate {
     }
 
     abstract class Struct[fields](
-      final val fields: fields
+        final val fields: fields
     ) {
       final val name: String = toString
     }
@@ -59,7 +59,7 @@ trait Incubate {
       implicit def forHList[h, t <: HList](implicit col: Collect[h], lcol: ListCollect[t]): Aux[h :: t, Option[col.Out] :: lcol.Out] =
         new ListCollect[h :: t] {
           private[this] final val none: Any ⇒ Option[col.Out] = _ ⇒ None
-          private[this] final val lnone: Any => HNil = _ ⇒ HNil
+          private[this] final val lnone: Any ⇒ HNil = _ ⇒ HNil
           type Out = Option[col.Out] :: lcol.Out
           def apply(l: h :: t): Out = l match {
             case h :: t ⇒
@@ -136,9 +136,9 @@ object test {
 
   final case object Point extends inc.Struct(
     fields =
-      ('x → inc.typ[Int]) ::
-        ('y → inc.typ[Int]) ::
-        HNil
+    ('x → inc.typ[Int]) ::
+      ('y → inc.typ[Int]) ::
+      HNil
   )
 
   def main(args: Array[String]): Unit = {
@@ -157,7 +157,7 @@ object test {
       implicit def col[s, t]: listop.Collect.Aux[(s, inc.typ[t]), String] =
         new listop.Collect[(s, inc.typ[t])] {
           type Out = String
-          val pf: PartialFunction[(s,inc.typ[t]), String] = {
+          val pf: PartialFunction[(s, inc.typ[t]), String] = {
             case p ⇒ p._1.toString
           }
         }

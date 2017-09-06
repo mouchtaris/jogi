@@ -28,7 +28,7 @@ object Incubate {
   }
 
   object patron3 {
-    app =>
+    app ⇒
     import patron2.record._
 
     type Bytes = Array[Byte]
@@ -39,7 +39,7 @@ object Incubate {
     trait Value[t]
 
     object Value {
-      def apply[t](): Value[t] = new Value[t] { }
+      def apply[t](): Value[t] = new Value[t] {}
       trait String extends Value[Predef.String]
       trait Bytes extends Value[patron3.Bytes]
       trait Int extends Value[scala.Int]
@@ -109,7 +109,6 @@ object Incubate {
       trait like extends (user `1-n` media_item)
       trait following extends (user `1-n` user)
     }
-
 
   }
 }

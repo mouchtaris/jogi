@@ -1,7 +1,7 @@
 package patron.action
 
 import akka.http.scaladsl.model.Uri
-import patron.{Action, ActionDescription}
+import patron.{ Action, ActionDescription }
 
 final case class Unknown(
   uri: Uri

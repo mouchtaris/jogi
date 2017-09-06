@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit.SECONDS
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.model.Uri
-import akka.stream.{ActorMaterializer, Materializer}
+import akka.stream.{ ActorMaterializer, Materializer }
 import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.Await
@@ -16,7 +16,7 @@ object test {
     val command = action.Unknown(Uri("https://www.lol.com/lol/lol"))
     val logger = log.StdoutLogger()
     logger.log(command)
-//    return ()
+    //    return ()
     import patron.db.PostgresqlSlickDatabase
     val conf = ConfigFactory.defaultApplication
     val db = new PostgresqlSlickDatabase(conf = conf, jdbcUrlConfPath = "db.pat.staging")
