@@ -1,6 +1,6 @@
 package patron2.typelevel
 
-trait And[+a, +b]
+trait And[+a, +b] extends Any
 
 object And {
 
@@ -9,7 +9,7 @@ object And {
   @inline def apply[a, b](): And[a, b] =
     Instance.asInstanceOf[And[a, b]]
 
-  @inline def apply[a, b](implicit and: And[a, b]): and.type =
+  @inline def apply[a, b](implicit and: And[a, b]): And[a, b] =
     and
 
   @inline implicit def and[a: Known, b: Known]: And[a, b] =

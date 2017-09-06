@@ -1,3 +1,3 @@
 package patron2.record
 
-trait Rel1ToN[a <: Record, b <: Record] extends Relation[a, b]
+trait Rel1ToN[a <: Record, b <: Record] extends Any with Relation[a, b]

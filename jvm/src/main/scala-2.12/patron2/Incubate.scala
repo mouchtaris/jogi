@@ -9,12 +9,6 @@ object Incubate {
     import patron2.typelevel._
     import typelevel._
 
-    trait Contains[r <: Record, t]
-
-    object Contains {
-
-      private[this] final object Instance extends Contains[Nil, Nil]
-    }
   }
 
   object patron3 {

@@ -1,6 +1,6 @@
 package patron2.record
 
-trait ::[+a, +b <: Record]
+trait ::[+a, +b <: Record] extends Any
 
 object :: {
 
