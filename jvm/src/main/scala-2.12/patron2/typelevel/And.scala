@@ -12,7 +12,7 @@ object And {
   @inline def apply[a, b](implicit and: And[a, b]): And[a, b] =
     and
 
-  @inline implicit def and[a: Known, b: Known]: And[a, b] =
+  @inline implicit def and[a, b](implicit a: a, b: b): And[a, b] =
     And()
 
 }

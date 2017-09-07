@@ -17,10 +17,10 @@ object ListFold {
   @inline def apply[f[_, _], r <: Record, out](): Aux[f, r, out] =
     Instance.asInstanceOf[Aux[f, r, out]]
 
-  @inline implicit def nilFold[f[_, _], a, b]: Aux[f, a :: b :: Nil, f[a, b]] =
+  @inline implicit def nilFold[f[_, _], a, b]: Aux[f, a :: Nil, a] =
     apply()
 
-  @inline implicit def listFold[f[_, _], h, t <: Record](implicit tfold: ListFold[f, t]): Aux[f, h :: t, f[h, tfold.Out]] =
+  @inline implicit def listFold[f[_, _], h, t <: Record, tfoldOut]: Aux[f, h :: t, f[h, tfoldOut]] =
     apply()
 
   @inline def apply[f[_, _], r <: Record, out](implicit fold: Aux[f, r, out]): Aux[f, r, out] =

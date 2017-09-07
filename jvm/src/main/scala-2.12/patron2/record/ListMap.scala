@@ -1,15 +1,15 @@
 package patron2.record
 
-import patron2.typelevel.Known
-
 trait ListMap[f[_], r <: Record] extends Any {
   type Out <: Record
 }
 
 object ListMap {
 
-  private[this] final object Instance extends ListMap[Known, Nil] {
-    type Out = Known[Nil]
+  private[this] type NoFun[t] = Nothing
+
+  private[this] final object Instance extends ListMap[Nothing, Nil] {
+    type Out = Nil
   }
 
   type Aux[f[_], r <: Record, out <: Record] = ListMap[f, r] {
@@ -34,8 +34,5 @@ object ListMap {
 
   @inline def apply[f[_]]: Applier[f] =
     new Applier(Applier)
-
-  @inline def apply[f[_], r <: Record, out <: Record](implicit map: Aux[f, r, out]): Aux[f, r, out] =
-    map
 
 }

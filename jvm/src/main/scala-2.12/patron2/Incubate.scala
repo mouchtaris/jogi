@@ -8,6 +8,27 @@ object Incubate {
 
     import patron2.typelevel._
     import typelevel._
+
+    def main(args: Array[String]): Unit = {
+
+      type s = Short :: Int :: Long :: Float :: Double :: Char :: String :: Nothing :: Unit :: Nil
+
+      type a = Long :: Double :: Nothing :: Nil
+
+      type b = Short :: Float :: Unit :: Vector[Int] :: Nil
+
+      trait c
+      trait d
+      trait e
+      implicit object c extends c
+      implicit object d extends d
+      implicitly[And[c, d]]
+      type known[t] = t
+      type li = c :: d :: Nil
+      val lm = implicitly[ListMap[known, li]]
+      val w: lm.Out = c :: d :: Nil
+//      implicitly[ForAll[c :: d :: Nil, known]]
+    }
   }
 
   object patron3 {
