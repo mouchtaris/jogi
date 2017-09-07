@@ -26,7 +26,7 @@ object Incubate {
       type known[t] = t
       type li = c :: d :: Nil
       val lm = implicitly[ListMap[known, li]]
-      val w: lm.Out = c :: d :: Nil
+//      val w: lm.Out = c :: d :: Nil
 //      implicitly[ForAll[c :: d :: Nil, known]]
     }
   }

@@ -2,6 +2,8 @@ package patron2
 
 package object record {
 
+  type ::[a, b <: Record] = Cons[a, b]
+
   type Record = a :: b forSome {
     type a
     type b

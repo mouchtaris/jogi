@@ -1,10 +1,10 @@
 package patron2.record
 
-trait ::[+a, +b <: Record] extends Any
+trait Cons[+a, +b <: Record] extends Any
 
-object :: {
+object Cons {
 
-  private[this] final object instance extends ::[Nothing, Nil]
+  private[this] final object instance extends Cons[Nothing, Nil]
 
   final implicit class ops[a, b <: Record](val self: a :: b) extends AnyVal {
 
