@@ -15,9 +15,9 @@ object ForAll {
 
   @inline implicit def listForAll[r <: Record, pred[_], mapOut <: Record, foldOut](
     implicit
-    listMap: ListMap.Aux[pred, r, mapOut],
+    listMap:  ListMap.Aux[pred, r, mapOut],
     listFold: ListFold.Aux[And, mapOut, foldOut],
-    proof: foldOut
+    proof:    foldOut
   ): ForAll[r, pred] =
     ForAll()
 

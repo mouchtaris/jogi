@@ -6,7 +6,7 @@ trait ListMap[f[_], r <: Record] {
 
 object ListMap {
 
-  private[this] type NoFun[t] = Nothing
+  private[this]type NoFun[t] = Nothing
 
   private[this] final object Instance extends ListMap[Nothing, Nil] {
     type Out = Nil
