@@ -1,5 +1,7 @@
 package patron2.record
 
+import patron2.typelevel
+
 trait Lub[r <: Record] extends Any {
   type Out
 }
@@ -19,7 +21,7 @@ object Lub {
   @inline implicit def nilLub[h]: Lub.Aux[h :: Nil, h] =
     Lub()
 
-  implicit def listLub[h, t <: Record, tu: Lub.Of[t]#is](implicit hlub: fun.lub.Lub[h, tu]): Lub.Aux[h :: t, hlub.Out] =
+  implicit def listLub[h, t <: Record, tu: Lub.Of[t]#is](implicit hlub: typelevel.Lub[h, tu]): Lub.Aux[h :: t, hlub.Out] =
     Lub()
 
 }

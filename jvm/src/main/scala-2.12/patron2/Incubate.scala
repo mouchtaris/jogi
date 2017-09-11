@@ -4,7 +4,7 @@ import predef._
 object Incubate {
 
   object record {
-    import patron2.record.{ Nil, _ }
+    import patron2.record.{Nil, _}
 
     import patron2.typelevel._
     import typelevel._
@@ -25,9 +25,10 @@ object Incubate {
       implicitly[And[c, d]]
       type known[t] = t
       type li = c :: d :: Nil
-      val lm = implicitly[ListMap[known, li]]
-//      val w: lm.Out = c :: d :: Nil
-//      implicitly[ForAll[c :: d :: Nil, known]]
+      val li: li = new c{} :: new d{} :: Nil
+      val lm = imply[ListMap[known, li]]
+      val w: lm.Out = c :: d :: Nil
+      val lf = implicitly[ListFold[And, lm.Out]]
     }
   }
 

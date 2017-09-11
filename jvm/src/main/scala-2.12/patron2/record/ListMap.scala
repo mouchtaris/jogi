@@ -1,6 +1,6 @@
 package patron2.record
 
-trait ListMap[f[_], r <: Record] extends Any {
+trait ListMap[f[_], r <: Record] {
   type Out <: Record
 }
 
