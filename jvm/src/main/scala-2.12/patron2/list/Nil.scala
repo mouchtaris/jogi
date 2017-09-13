@@ -1,3 +1,3 @@
-package patron2.record
+package patron2.list
 
 object Nil extends NilBrick

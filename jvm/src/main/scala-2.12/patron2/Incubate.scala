@@ -38,7 +38,7 @@ object Incubate {
   }
 
   object record {
-    import patron2.record.{ Nil, _ }
+    import patron2.list.{ Nil, _ }
 
     import patron2.typelevel._
     import typelevel._
@@ -119,7 +119,7 @@ object Incubate {
 
   object patron3 {
     app ⇒
-    import patron2.record._
+    import patron2.list._
 
     type Bytes = Array[Byte]
     trait Enum extends (Value.Int :: Nil) {

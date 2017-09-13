@@ -1,4 +1,4 @@
-package patron2.record
+package patron2.list
 
 trait ListMap[f[_], r <: Record] {
   type Out <: Record

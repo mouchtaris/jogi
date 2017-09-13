@@ -1,3 +1,3 @@
-package patron2.record
+package patron2.list
 
 trait NilBrick extends (NilBrick :: NilBrick)

@@ -1,4 +1,4 @@
-package patron2.record
+package patron2.list
 
 object Subset {
 
