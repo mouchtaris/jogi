@@ -1,95 +1,15 @@
 package jogi
-import predef._
-
-object foff {
-  def main(args: Array[String]): Unit = {
-    Incubate.record.main(args)
-  }
-}
 
 object Incubate {
 
   object record {
-    import list.{ Nil, _ }
-    import list.ops._
-    import pig._
-    import typelevel._
 
-    def main(args: Array[String]): Unit = {
-
-      type s = Short :: Int :: Long :: Float :: Double :: String :: Unit :: Nil
-
-      type a = Long :: Double :: Nil
-
-      //      type b = Short :: Float :: Unit :: Vector[Int] :: Nil
-      //
-      //      trait c
-      //      trait d
-      //      trait e
-      //      implicit object c extends c
-      //      implicit object d extends d
-      //      implicitly[And[c, d]]
-      //      type known[t] = t
-      //      type li = c :: d :: Nil
-      //      val li: li = new c {} :: new d {} :: Nil
-      //      val lm = imply[ListMap[known, li]]
-      //      val w: lm.Out = c :: d :: Nil
-      //      trait clue[a]
-      //      implicit object cluec extends clue[c]
-      //      implicit object clued extends clue[d]
-      //      val cluelm = imply[ListMap[clue, li]]
-      //      val ww: cluelm.Out = new clue[c] {} :: new clue[d] {} :: Nil
-      //      val cluefm = imply[ListMap[clue, a :: b :: Nil]]
-      //      val wwf: cluefm.Out = new clue[a] {} :: new clue[b] {} :: Nil
-      //      implicitly[ListFold[And, lm.Out]]
-      //      val lf = imply[ListFold[And, cluelm.Out]]
-      //      val lff = imply[ListFold[And, cluefm.Out]]
-      //      implicitly[lf.Out]
-      //      implicitly[ForAll[li, clue]]
-      //      implicitly[Contains[a, Long]]
-      //      proof: ForAll[a, Contains.in[s]#typ]
-      //      listMap:  ListMap.Aux[pred, r, mapOut],
-      val lm = imply[ListMap[Contains.in[s]#typ, a]]
-      val lf = imply[ListFold[And, lm.Out]]
-      val fa = imply[ForAll[a, Contains.in[s]#typ]]
-      val subs = imply[Subset[a, s]]
-      type tryme = lf.Out
-      val pig = Pig[tryme]
-      val triedme = imply[tryme]
-      val pig2 = Pig of triedme
-      println(pig)
-      println(pig2)
-      //      val proof = implicitly[lf.Out]
-      //            implicitly[ForAll[a, Contains.in[s]#typ]]
-      //      implicitly[Subset[a, s]]
-    }
   }
 
   object patron3 {
     app ⇒
-    import jogi.list._
-
-    type Bytes = Array[Byte]
-    trait Enum extends (Value.Int :: Nil) {
-      trait values
-    }
-
-    trait Value[t]
-
-    object Value {
-      def apply[t](): Value[t] = new Value[t] {}
-      trait String extends Value[Predef.String]
-      trait Bytes extends Value[patron3.Bytes]
-      trait Int extends Value[scala.Int]
-      trait Boolean extends Value[scala.Boolean]
-      trait Uri extends Value[akka.http.scaladsl.model.Uri]
-      implicit case object String extends String
-      implicit case object Bytes extends Bytes
-      implicit case object Int extends Int
-      implicit case object Boolean extends Boolean
-      implicit def singleFieldValue[t: Value]: Value[t :: Nil] = Value()
-      type of[t] = t :: Nil
-    }
+    import list._
+    import jogi.record._
 
     object values {
       trait email extends Value.String
