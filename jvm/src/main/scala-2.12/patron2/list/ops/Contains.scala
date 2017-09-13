@@ -1,4 +1,6 @@
-package patron2.list
+package patron2.list.ops
+
+import patron2.list.{ Nil, Record }
 
 trait Contains[r <: Record, t] extends Any
 

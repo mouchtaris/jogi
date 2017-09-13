@@ -1,4 +1,6 @@
-package patron2.list
+package patron2.list.ops
+
+import patron2.list.{ ::, Nil, Record }
 
 trait ListFold[f[_, _], r <: Record] {
   type Out

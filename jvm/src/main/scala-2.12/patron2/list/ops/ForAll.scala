@@ -1,5 +1,6 @@
-package patron2.list
+package patron2.list.ops
 
+import patron2.list._
 import patron2.typelevel.And
 
 trait ForAll[r <: Record, pred[_]]

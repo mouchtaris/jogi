@@ -1,8 +1,6 @@
 package patron2
 import predef._
 
-import scala.reflect.ClassTag
-
 object foff {
   def main(args: Array[String]): Unit = {
     Incubate.record.main(args)
@@ -38,7 +36,9 @@ object Incubate {
   }
 
   object record {
-    import patron2.list.{ Nil, _ }
+    import patron2.list
+    import list.{ Nil, _ }
+    import list.ops._
 
     import patron2.typelevel._
     import typelevel._

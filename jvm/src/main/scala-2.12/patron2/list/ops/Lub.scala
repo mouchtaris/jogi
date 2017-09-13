@@ -1,5 +1,6 @@
-package patron2.list
+package patron2.list.ops
 
+import patron2.list.{ ::, Nil, Record }
 import patron2.typelevel
 
 trait Lub[r <: Record] extends Any {
