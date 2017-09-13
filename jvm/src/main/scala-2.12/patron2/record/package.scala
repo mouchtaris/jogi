@@ -1,6 +1,7 @@
 package patron2
 
-package object record {
+package object record extends AnyRef
+    with Subset.PackageExtension {
 
   type ::[a, b <: Record] = Cons[a, b]
 
