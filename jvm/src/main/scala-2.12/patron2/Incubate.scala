@@ -1,34 +1,119 @@
 package patron2
 import predef._
 
+import scala.reflect.ClassTag
+
+object foff {
+  def main(args: Array[String]): Unit = {
+    Incubate.record.main(args)
+  }
+}
+
 object Incubate {
+
+  object pig {
+    trait Pig[t] {
+      final type T = t
+      val desc: String
+      final override def toString: String = desc
+    }
+
+    object Pig {
+      //      @inline implicit def forType[t: ClassTag]: Pig[t] =
+      //        new Pig[t] {
+      //          val desc: String = implicitly[ClassTag[t]].runtimeClass.getName
+      //        }
+
+      @inline def apply[t](d: String): Pig[t] =
+        new Pig[t] {
+          val desc: String = d
+        }
+
+      @inline def apply[t: Pig]: Pig[t] =
+        implicitly
+
+      @inline def of[t: Pig](t: t): Pig[t] =
+        Pig[t]
+    }
+  }
 
   object record {
     import patron2.record.{ Nil, _ }
 
     import patron2.typelevel._
     import typelevel._
+    import pig.Pig
+
+    implicit val shortPig: Pig[Short] = Pig("Short")
+    implicit val intPig: Pig[Int] = Pig("Int")
+    implicit val longPig: Pig[Long] = Pig("Long")
+    implicit val stringPig: Pig[String] = Pig("String")
+    implicit val floatPig: Pig[Float] = Pig("Float")
+    implicit val doublePig: Pig[Double] = Pig("Double")
+    //    implicit val charPig: Pig[Char] = Pig("Char")
+    //    implicit val nothingPig: Pig[Nothing] = Pig("Nothing")
+    implicit val unitPig: Pig[Unit] = Pig("Unit")
+    implicit val nilPig: Pig[Nil] = Pig("Nil")
+
+    @inline implicit def vectorPig[vectorT: Pig]: Pig[Vector[vectorT]] =
+      Pig(s"Vector[${Pig[vectorT]}]")
+
+    @inline implicit def recordPig[h: Pig, t <: Record: Pig]: Pig[h :: t] =
+      Pig(s"${Pig[h]} :: ${Pig[t]}")
+
+    @inline implicit def containsPig[a: Pig, s <: Record: Pig]: Pig[Contains[s, a]] =
+      Pig(s"(${Pig[a]} in ${Pig[s]})")
+
+    @inline implicit def andPig[a: Pig, b: Pig]: Pig[And[a, b]] =
+      Pig(s"${Pig[a]} AND ${Pig[b]}")
 
     def main(args: Array[String]): Unit = {
 
-      type s = Short :: Int :: Long :: Float :: Double :: Char :: String :: Nothing :: Unit :: Nil
+      type s = Short :: Int :: Long :: Float :: Double :: String :: Unit :: Nil
 
-      type a = Long :: Double :: Nothing :: Nil
+      type a = Long :: Double :: Nil
 
-      type b = Short :: Float :: Unit :: Vector[Int] :: Nil
-
-      trait c
-      trait d
-      trait e
-      implicit object c extends c
-      implicit object d extends d
-      implicitly[And[c, d]]
-      type known[t] = t
-      type li = c :: d :: Nil
-      val li: li = new c {} :: new d {} :: Nil
-      val lm = imply[ListMap[known, li]]
-      val w: lm.Out = c :: d :: Nil
-      val lf = implicitly[ListFold[And, lm.Out]]
+      //      type b = Short :: Float :: Unit :: Vector[Int] :: Nil
+      //
+      //      trait c
+      //      trait d
+      //      trait e
+      //      implicit object c extends c
+      //      implicit object d extends d
+      //      implicitly[And[c, d]]
+      //      type known[t] = t
+      //      type li = c :: d :: Nil
+      //      val li: li = new c {} :: new d {} :: Nil
+      //      val lm = imply[ListMap[known, li]]
+      //      val w: lm.Out = c :: d :: Nil
+      //      trait clue[a]
+      //      implicit object cluec extends clue[c]
+      //      implicit object clued extends clue[d]
+      //      val cluelm = imply[ListMap[clue, li]]
+      //      val ww: cluelm.Out = new clue[c] {} :: new clue[d] {} :: Nil
+      //      val cluefm = imply[ListMap[clue, a :: b :: Nil]]
+      //      val wwf: cluefm.Out = new clue[a] {} :: new clue[b] {} :: Nil
+      //      implicitly[ListFold[And, lm.Out]]
+      //      val lf = imply[ListFold[And, cluelm.Out]]
+      //      val lff = imply[ListFold[And, cluefm.Out]]
+      //      implicitly[lf.Out]
+      //      implicitly[ForAll[li, clue]]
+      //      implicitly[Contains[a, Long]]
+      //      proof: ForAll[a, Contains.in[s]#typ]
+      //      listMap:  ListMap.Aux[pred, r, mapOut],
+      val lm = imply[ListMap[Contains.in[s]#typ, a]]
+      val lf = imply[ListFold[And, lm.Out]]
+      val fa = imply[ForAll[a, Contains.in[s]#typ]]
+      val subs = imply[Subset[a, s]]
+      type tryme = lf.Out
+      val pig = Pig[tryme]
+      val triedme = imply[tryme]
+      val pig2 = Pig of triedme
+      println(pig)
+      println(pig2)
+      //      val proof = implicitly[lf.Out]
+      //            implicitly[ForAll[a, Contains.in[s]#typ]]
+      //      implicitly[Subset[a, s]]
     }
   }
 

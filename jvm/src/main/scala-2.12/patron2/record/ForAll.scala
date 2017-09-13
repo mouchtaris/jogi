@@ -2,7 +2,7 @@ package patron2.record
 
 import patron2.typelevel.And
 
-trait ForAll[r <: Record, pred[_]] extends Any
+trait ForAll[r <: Record, pred[_]]
 
 object ForAll {
 

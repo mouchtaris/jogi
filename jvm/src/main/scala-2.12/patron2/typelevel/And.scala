@@ -1,6 +1,6 @@
 package patron2.typelevel
 
-trait And[+a, +b] extends Any
+trait And[+a, +b]
 
 object And {
 
