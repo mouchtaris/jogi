@@ -1,6 +1,6 @@
 package jogi
 
-import list.Record
+import list.List
 
 /**
  * A record is a list of types.
@@ -47,8 +47,8 @@ import list.Record
  */
 package object record {
 
-  type `1-1`[a <: Record, b <: Record] = Rel1To1[a, b]
-  type `1-n`[a <: Record, b <: Record] = Rel1ToN[a, b]
-  type `n-n`[a <: Record, b <: Record] = RelNToN[a, b]
+  type `1-1`[a <: List, b <: List] = Rel1To1[a, b]
+  type `1-n`[a <: List, b <: List] = Rel1ToN[a, b]
+  type `n-n`[a <: List, b <: List] = RelNToN[a, b]
 
 }

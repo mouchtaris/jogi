@@ -1,6 +1,6 @@
 package jogi
 package record
 
-import list.Record
+import list.List
 
-trait Rel1ToN[a <: Record, b <: Record] extends Any with Relation[a, b]
+trait Rel1ToN[a <: List, b <: List] extends Any with Relation[a, b]

@@ -3,7 +3,7 @@ package jogi.list.ops
 import jogi.list._
 import jogi.typelevel.And
 
-trait ForAll[r <: Record, pred[_]]
+trait ForAll[r <: List, pred[_]]
 
 object ForAll {
 
@@ -11,10 +11,10 @@ object ForAll {
 
   private[this] final object Instance extends ForAll[Nil, NoFun]
 
-  @inline def apply[r <: Record, pred[_]](): ForAll[r, pred] =
+  @inline def apply[r <: List, pred[_]](): ForAll[r, pred] =
     Instance.asInstanceOf[ForAll[r, pred]]
 
-  @inline implicit def listForAll[r <: Record, pred[_], mapOut <: Record, foldOut](
+  @inline implicit def listForAll[r <: List, pred[_], mapOut <: List, foldOut](
     implicit
     listMap:  ListMap.Aux[pred, r, mapOut],
     listFold: ListFold.Aux[And, mapOut, foldOut],

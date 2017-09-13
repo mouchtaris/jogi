@@ -3,9 +3,9 @@ package jogi
 package object list extends AnyRef
     with Pigs.PackageExtension {
 
-  type ::[a, b <: Record] = Cons[a, b]
+  type ::[a, b <: List] = Cons[a, b]
 
-  type Record = a :: b forSome {
+  type List = a :: b forSome {
     type a
     type b
   }

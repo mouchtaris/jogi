@@ -1,12 +1,12 @@
 package jogi.list.ops
 
-import jogi.list.Record
+import jogi.list.List
 
 object Subset {
 
   trait PackageExtension {
 
-    type Subset[a <: Record, s <: Record] = ForAll[a, Contains.in[s]#typ]
+    type Subset[a <: List, s <: List] = ForAll[a, Contains.in[s]#typ]
 
   }
 
