@@ -13,6 +13,7 @@ object Service {
   object Type {
     trait Hourly extends Type
     trait Fixed extends Type
+    trait Negotiable extends Type
     trait Event extends Type
   }
 
@@ -26,5 +27,4 @@ trait Service extends (
   Service.Name ::
     Service.Type ::
     Service.Price ::
-    Nil
-  )
+    Nil)

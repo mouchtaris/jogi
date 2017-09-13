@@ -29,6 +29,9 @@ object Value {
   trait Uri extends Value[akka.http.scaladsl.model.Uri]
   implicit case object Uri extends Uri
 
+  trait Instant extends Value[java.time.Instant]
+  implicit case object Instant extends Instant
+
   @inline implicit def singleFieldValue[t: Value]: Value[t :: Nil] =
     Value()
 
