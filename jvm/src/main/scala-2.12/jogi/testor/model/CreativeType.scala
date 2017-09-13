@@ -1,5 +1,6 @@
 package jogi
 package testor
+package model
 
 import record.Enum
 
