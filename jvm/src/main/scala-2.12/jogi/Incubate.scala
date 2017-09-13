@@ -2,26 +2,13 @@ package jogi
 
 object Incubate {
 
-  object record {
-
-  }
-
   object patron3 {
     app ⇒
     import list._
-    import jogi.record._
+    import record._
+    import testor._
 
     object values {
-      trait email extends Value.String
-      trait passhash extends Value.Bytes
-      trait passsalt extends Value.Bytes
-
-      object account {
-        trait email extends values.email
-        trait passhash extends values.passhash
-        trait passsalt extends values.passsalt
-      }
-      trait account extends (account.email :: account.passhash :: account.passsalt :: Nil)
 
       trait creative_type extends Enum
       object creative_type {
