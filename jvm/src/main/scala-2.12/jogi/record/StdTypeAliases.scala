@@ -1,11 +1,9 @@
 package jogi.record
 
-object StdTypeAliases {
+trait StdTypeAliases {
 
-  trait PackageExtension {
-
-    type Bytes = Array[Byte]
-
-  }
+  type Bytes = Array[Byte]
 
 }
+
+object StdTypeAliases extends StdTypeAliases

@@ -1,5 +1,11 @@
 package jogi
 
+object foff {
+  def main(args: Array[String]): Unit = {
+    println("ibo")
+  }
+}
+
 object Incubate {
 
   object patron3 {
@@ -9,12 +15,12 @@ object Incubate {
     import testor._
 
     object relations {
-      trait user_account extends (account `1-n` user)
-      trait user_media_item extends (user `1-n` media_item)
-      trait user_creative_type extends (user `1-n` creative_type)
-      trait cover_media extends (user `1-1` media_item)
-      trait like extends (user `1-n` media_item)
-      trait following extends (user `1-n` user)
+      trait user_account extends (Account `1-n` User)
+      trait user_media_item extends (User `1-n` MediaItem)
+      trait user_creative_type extends (User `1-n` CreativeType)
+      trait cover_media extends (User `1-1` MediaItem)
+      trait like extends (User `1-n` MediaItem)
+      trait following extends (User `1-n` User)
     }
 
   }

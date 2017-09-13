@@ -17,7 +17,7 @@ object Value {
   trait String extends Value[Predef.String]
   implicit case object String extends String
 
-  trait Bytes extends Value[Bytes]
+  trait Bytes extends Value[StdTypeAliases.Bytes]
   implicit case object Bytes extends Bytes
 
   trait Long extends Value[scala.Long]

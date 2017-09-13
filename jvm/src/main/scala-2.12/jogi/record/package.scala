@@ -45,8 +45,7 @@ import list.Record
  *   type Hand = Finger :: Nil
  * }}}
  */
-package object record extends AnyRef
-    with StdTypeAliases.PackageExtension {
+package object record {
 
   type `1-1`[a <: Record, b <: Record] = Rel1To1[a, b]
   type `1-n`[a <: Record, b <: Record] = Rel1ToN[a, b]
