@@ -28,9 +28,13 @@ object RelationAliasExample {
   //
   // Define a relaationship
   //
+
   trait Akin extends (Ant `1-n` Cousin)
 
+  //
   // Specify Akin's aliases
+  //
+
   object Akin {
     final implicit case object RelationAlias extends record.RelationAlias[Akin] {
       final implicit case object INSECT extends typelevel.StringLiteral { type Self = this.type }
@@ -42,6 +46,8 @@ object RelationAliasExample {
 
   //
   // Print out aliases
+  //
+  
   def main(args: Array[String]): Unit = {
 
     val aliases = RelationAlias[Akin]
