@@ -47,7 +47,7 @@ object RelationAliasExample {
   //
   // Print out aliases
   //
-  
+
   def main(args: Array[String]): Unit = {
 
     val aliases = RelationAlias[Akin]

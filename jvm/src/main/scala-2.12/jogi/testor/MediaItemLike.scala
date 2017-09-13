@@ -3,4 +3,4 @@ package testor
 
 import record.`1-n`
 
-trait Like extends (User `1-n` MediaItem)
+trait MediaItemLike extends (User `1-n` MediaItem)
