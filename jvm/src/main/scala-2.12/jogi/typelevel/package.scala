@@ -1,5 +1,4 @@
 package jogi
 
-package object typelevel {
-
-}
+package object typelevel extends AnyRef
+  with Pigs.PackageExtension

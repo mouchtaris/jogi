@@ -12,20 +12,8 @@ object Incubate {
   object record {
     import list.{ Nil, _ }
     import list.ops._
-
+    import pig._
     import typelevel._
-    import pig.Pig
-
-    implicit val nilPig: Pig[Nil] = Pig("Nil")
-
-    @inline implicit def recordPig[h: Pig, t <: Record: Pig]: Pig[h :: t] =
-      Pig(s"${Pig[h]} :: ${Pig[t]}")
-
-    @inline implicit def containsPig[a: Pig, s <: Record: Pig]: Pig[Contains[s, a]] =
-      Pig(s"(${Pig[a]} in ${Pig[s]})")
-
-    @inline implicit def andPig[a: Pig, b: Pig]: Pig[And[a, b]] =
-      Pig(s"${Pig[a]} AND ${Pig[b]}")
 
     def main(args: Array[String]): Unit = {
 

@@ -1,6 +1,7 @@
 package jogi
 
-package object list {
+package object list extends AnyRef
+    with Pigs.PackageExtension {
 
   type ::[a, b <: Record] = Cons[a, b]
 
