@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Enum, Value, Entity, rel }
+import record.{ Enum, Value, Entity, rel, key }
 
 object MediaItem {
   trait Uri extends Value.Uri
@@ -20,7 +20,7 @@ object MediaItem {
 
 // format: OFF
 trait MediaItem extends Entity[
-  MediaItem.Uri ::
+  MediaItem.Uri with key.Primary ::
     MediaItem.Title ::
     MediaItem.Type ::
     MediaItem.Description ::

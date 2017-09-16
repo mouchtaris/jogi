@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Entity }
+import record.{ Entity, key }
 
 object Account {
   trait Email extends values.Email
@@ -13,7 +13,7 @@ object Account {
 
 // format: OFF
 trait Account extends Entity[
-  Account.Email ::
+  Account.Email with key.Primary ::
     Account.PasswordHash ::
     Account.PasswordSalt ::
     Nil]

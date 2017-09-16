@@ -47,4 +47,5 @@ import list.List
  */
 package object record {
   object rel extends Relation
+  object key extends Key
 }

@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Value, Enum, Entity, rel }
+import record.{ Value, Enum, Entity, rel, key }
 
 object Service {
   trait Name extends Value.String
@@ -20,8 +20,8 @@ object Service {
 
 // format: OFF
 trait Service extends Entity[
-  Service.Name ::
-    Service.Type ::
+  Service.Name with key.Primary ::
+    Service.Type with key.Primary ::
     Service.Price ::
     rel.has_one[User] ::
     Nil]
