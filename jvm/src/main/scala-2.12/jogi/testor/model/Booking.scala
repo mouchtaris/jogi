@@ -16,12 +16,13 @@ object Booking {
     trait Service extends (model.Service `has_many` Booking)
   }
 
+  // format: OFF
   trait PrimaryKey extends (
     relations.Patron ::
       relations.Creative ::
       relations.Service ::
       Nil)
-
+  // format: ON
 }
 
 // format: OFF
