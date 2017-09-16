@@ -29,7 +29,7 @@ object RelationAliasExample {
   // Define a relaationship
   //
 
-  trait Akin extends (Ant `1-n` Cousin)
+  trait Akin extends (Ant `1:n` Cousin)
 
   //
   // Specify Akin's aliases

@@ -32,6 +32,13 @@ object Value {
   trait Instant extends Value[java.time.Instant]
   implicit case object Instant extends Instant
 
+  trait Set[t] extends Value[Predef.Set[t]]
+  object Set {
+    private[this] final case object Instance extends Set[Nothing]
+    implicit def setFor[t]: Set[t] =
+      Instance.asInstanceOf[Set[t]]
+  }
+
   @inline implicit def singleFieldValue[t: Value]: Value[t :: Nil] =
     Value()
 

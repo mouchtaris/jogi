@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Enum, Value, `1-n` }
+import record.{ Enum, Value, `1:n` }
 
 object User {
   trait Bio extends Value.String
@@ -18,7 +18,7 @@ object User {
   }
 
   object relations {
-    trait UserAccount extends (Account `1-n` User)
+    trait UserAccount extends (Account `1:n` User)
   }
 }
 

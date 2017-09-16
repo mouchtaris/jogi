@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Enum, Value, `1-n` }
+import record.{ Enum, Value, `1:n` }
 
 object MediaItem {
   trait Uri extends Value.Uri
@@ -18,7 +18,8 @@ object MediaItem {
   }
 
   object relations {
-    trait UserMediaItem extends (User `1-n` MediaItem)
+    trait MediaItem extends (User `1:n` model.MediaItem)
+    type all = MediaItem :: Nil
   }
 }
 

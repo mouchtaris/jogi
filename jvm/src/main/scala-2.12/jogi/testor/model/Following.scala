@@ -2,9 +2,9 @@ package jogi
 package testor
 package model
 
-import record.`1-n`
+import record.`1:n`
 
-trait Following extends (User `1-n` User)
+trait Following extends (User `1:n` User)
 
 object Following {
 

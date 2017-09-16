@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ `1-n`, Value }
+import record.{ has_many, Value }
 
 object Booking {
   trait Date extends Value.Instant
@@ -11,18 +11,23 @@ object Booking {
   trait Price extends Value.Long
 
   object relations {
-
-    trait BookingPatron extends (User `1-n` Booking)
-
-    trait BookingCreative extends (User `1-n` Booking)
-
-    trait BookingService extends (Service `1-n` Booking)
-
+    trait Patron extends (User `has_many` Booking)
+    trait Creative extends (User `has_many` Booking)
+    trait Service extends (Service `has_many` Booking)
   }
+
+  trait PrimaryKey extends (
+    relations.Patron ::
+      relations.Creative ::
+      relations.Service ::
+      Nil)
 
 }
 
 // format: OFF
 trait Booking extends (
   Booking.Date ::
+    Booking.relations.Patron ::
+    Booking.relations.Creative ::
+    Booking.relations.Service ::
     Nil)
