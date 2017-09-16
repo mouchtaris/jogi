@@ -47,14 +47,6 @@ import list.List
  */
 package object record {
 
-  type `1:1`[a <: List, b <: List] = Rel1To1[a, b]
-  type `1:n`[a <: List, b <: List] = Rel1ToN[a, b]
-  type `n:n`[a <: List, b <: List] = RelNToN[a, b]
-
-  type has_one[a <: List, b <: List] = a `1:1` b
-  type has_many[a <: List, b <: List] = a `1:n` b
-  type has_and_belongs_to_many[a <: List, b <: List] = a `n:n` b
-
   trait EntityType[record <: List] {
     final type Record = record
     val name: String
