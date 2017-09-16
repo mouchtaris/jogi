@@ -13,7 +13,7 @@ object Booking {
   object relations {
     trait Patron extends (User `has_many` Booking)
     trait Creative extends (User `has_many` Booking)
-    trait Service extends (Service `has_many` Booking)
+    trait Service extends (model.Service `has_many` Booking)
   }
 
   trait PrimaryKey extends (
