@@ -3,32 +3,21 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ has_many, Value }
+import record.{ Value, Entity, rel }
 
 object Booking {
   trait Date extends Value.Instant
   trait Duration extends Value.Long
   trait Price extends Value.Long
 
-  object relations {
-    trait Patron extends (User `has_many` Booking)
-    trait Creative extends (User `has_many` Booking)
-    trait Service extends (model.Service `has_many` Booking)
-  }
-
-  // format: OFF
-  trait PrimaryKey extends (
-    relations.Patron ::
-      relations.Creative ::
-      relations.Service ::
-      Nil)
-  // format: ON
+  final implicit case object Patron extends typelevel.StringLiteral { type Self = this.type }
+  final implicit case object Creative extends typelevel.StringLiteral { type Self = this.type }
 }
 
 // format: OFF
-trait Booking extends (
+trait Booking extends Entity[
   Booking.Date ::
-    Booking.relations.Patron ::
-    Booking.relations.Creative ::
-    Booking.relations.Service ::
-    Nil)
+    rel.has_one[User] with rel.as[Booking.Patron.Self] ::
+    rel.has_one[User] with rel.as[Booking.Creative.Self] ::
+    rel.has_one[Service] ::
+    Nil]

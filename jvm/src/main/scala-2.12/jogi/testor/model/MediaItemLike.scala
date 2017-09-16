@@ -2,9 +2,11 @@ package jogi
 package testor
 package model
 
-import record.`1:n`
+import list.{ ::, Nil }
+import record.{ Entity, rel }
 
-/**
- * Created by nikos on 9/13/17.
- */
-trait MediaItemLike extends (User `1:n` MediaItem)
+// format: OFF
+trait MediaItemLike extends Entity[
+  rel.has_one[User] ::
+    rel.has_one[MediaItem] ::
+    Nil]

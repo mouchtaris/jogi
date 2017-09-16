@@ -2,18 +2,18 @@ package jogi
 package testor
 package model
 
-import record.`1:n`
-
-trait Following extends (User `1:n` User)
+import list.{ ::, Nil }
+import record.{ Entity, rel }
 
 object Following {
 
-  final implicit object RelationAlias extends record.RelationAlias[Following] {
-    final implicit case object Follower extends typelevel.StringLiteral { type Self = this.type }
-    final implicit case object Following extends typelevel.StringLiteral { type Self = this.type }
-
-    type NameA = Follower.Self
-    type NameB = Following.Self
-  }
+  final implicit case object Follower extends typelevel.StringLiteral { type Self = this.type }
+  final implicit case object Following extends typelevel.StringLiteral { type Self = this.type }
 
 }
+
+// format: OFF
+trait Following extends Entity[
+  rel.has_one[User] with rel.as[Following.Follower.Self] ::
+    rel.has_one[User] with rel.as[Following.Following.Self] ::
+    Nil]

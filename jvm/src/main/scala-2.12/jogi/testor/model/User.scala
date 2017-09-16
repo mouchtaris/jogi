@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Enum, Value, `1:n` }
+import record.{ Enum, Value, rel, Entity }
 
 object User {
   trait Bio extends Value.String
@@ -16,17 +16,14 @@ object User {
     trait Creative extends Type
     trait Patron extends Type
   }
-
-  object relations {
-    trait UserAccount extends (Account `1:n` User)
-  }
 }
 
 // format: OFF
-trait User extends (
+trait User extends Entity[
   User.Type ::
     User.Bio ::
     User.CreativeType ::
     User.Name ::
     User.LastName ::
-    Nil)
+    rel.has_one[Account] ::
+    Nil]

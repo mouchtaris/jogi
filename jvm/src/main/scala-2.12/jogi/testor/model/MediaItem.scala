@@ -3,7 +3,7 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Enum, Value, `1:n` }
+import record.{ Enum, Value, Entity, rel }
 
 object MediaItem {
   trait Uri extends Value.Uri
@@ -16,17 +16,13 @@ object MediaItem {
     trait Video extends Type
     trait Audio extends Type
   }
-
-  object relations {
-    trait MediaItem extends (User `1:n` model.MediaItem)
-    type all = MediaItem :: Nil
-  }
 }
 
 // format: OFF
-trait MediaItem extends (
+trait MediaItem extends Entity[
   MediaItem.Uri ::
     MediaItem.Title ::
     MediaItem.Type ::
     MediaItem.Description ::
-    Nil)
+    rel.has_one[User] ::
+    Nil]
