@@ -46,26 +46,5 @@ import list.List
  * }}}
  */
 package object record {
-
-  trait EntityType[record <: List] {
-    final type Record = record
-    val name: String
-  }
-
-  trait Entity[record <: List] {
-    companion ⇒
-
-    trait T extends EntityType[record] {
-      final val name: String = companion.toString
-    }
-
-    final implicit case object Instance extends T
-  }
-
-  object rel {
-    trait has_one[e <: Entity[r] forSome { type r <: List }]
-    trait has_many[e <: Entity[r] forSome { type r <: List }]
-
-    trait as[alias <: typelevel.StringLiteral]
-  }
+  object rel extends Relation
 }
