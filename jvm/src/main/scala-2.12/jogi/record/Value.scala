@@ -10,3 +10,12 @@ package record
 trait Value[scalaType] {
   final type ScalaType = scalaType
 }
+
+object Value {
+
+  private[this] object Instance extends Value[Nothing]
+
+  @inline def apply[st](): Value[st] =
+    Instance.asInstanceOf[Value[st]]
+
+}
