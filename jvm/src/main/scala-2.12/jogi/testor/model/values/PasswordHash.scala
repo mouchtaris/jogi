@@ -3,6 +3,6 @@ package testor
 package model
 package values
 
-import record.Value
+import record.value
 
-trait PasswordHash extends Value.Bytes
+trait PasswordHash extends value.Bytes

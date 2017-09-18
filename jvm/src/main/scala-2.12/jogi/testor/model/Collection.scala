@@ -3,12 +3,12 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Value, Entity, rel, key }
+import record.{ value, Entity, rel, key }
 
 object Collection {
-  trait Name extends Value.String
-  trait Title extends Value.String
-  trait Subtitle extends Value.String
+  trait Name extends value.String
+  trait Title extends value.String
+  trait Subtitle extends value.String
 }
 
 // format: OFF

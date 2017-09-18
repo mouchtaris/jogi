@@ -3,14 +3,14 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Enum, Value, rel, Entity, key }
+import record.{ Enum, value, rel, Entity, key }
 
 object User {
-  trait Bio extends Value.String
+  trait Bio extends value.String
   trait CreativeType extends model.CreativeType
-  trait Name extends Value.String
-  trait LastName extends Value.String
-  trait Username extends Value.String
+  trait Name extends value.String
+  trait LastName extends value.String
+  trait Username extends value.String
 
   sealed trait Type extends Enum
   object Type {

@@ -3,6 +3,6 @@ package testor
 package model
 package values
 
-import record.Value
+import record.value
 
-trait Email extends Value.String
+trait Email extends value.String

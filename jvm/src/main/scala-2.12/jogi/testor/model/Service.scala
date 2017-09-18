@@ -3,11 +3,11 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Value, Enum, Entity, rel, key }
+import record.{ value, Enum, Entity, rel, key }
 
 object Service {
-  trait Name extends Value.String
-  trait Price extends Value.Long
+  trait Name extends value.String
+  trait Price extends value.Long
 
   sealed trait Type extends Enum
   object Type {

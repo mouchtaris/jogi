@@ -3,12 +3,12 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Enum, Value, Entity, rel, key }
+import record.{ Enum, value, Entity, rel, key }
 
 object MediaItem {
-  trait Uri extends Value.Uri
-  trait Title extends Value.String
-  trait Description extends Value.String
+  trait Uri extends value.Uri
+  trait Title extends value.String
+  trait Description extends value.String
 
   sealed trait Type extends Enum
   object Type {

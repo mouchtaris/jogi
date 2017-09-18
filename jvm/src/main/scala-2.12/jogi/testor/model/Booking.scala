@@ -3,12 +3,12 @@ package testor
 package model
 
 import list.{ ::, Nil }
-import record.{ Value, Entity, rel }
+import record.{ value, Entity, rel }
 
 object Booking {
-  trait Date extends Value.Instant
-  trait Duration extends Value.Long
-  trait Price extends Value.Long
+  trait Date extends value.Instant
+  trait Duration extends value.Long
+  trait Price extends value.Long
 
   final implicit case object Patron extends typelevel.StringLiteral { type Self = this.type }
   final implicit case object Creative extends typelevel.StringLiteral { type Self = this.type }
