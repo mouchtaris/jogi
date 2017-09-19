@@ -1,6 +1,6 @@
 package jogi
 package record
 
-import list.{ List }
+import typelevel.list.{ List }
 
 trait Entity[record <: List]

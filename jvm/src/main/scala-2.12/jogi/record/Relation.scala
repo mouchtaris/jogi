@@ -1,7 +1,7 @@
 package jogi
 package record
 
-import list.{ List }
+import typelevel.list.{ List }
 
 trait Relation {
   trait has_one[e <: Entity[r] forSome { type r <: List }]

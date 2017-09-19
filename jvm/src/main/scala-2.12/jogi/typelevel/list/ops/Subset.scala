@@ -1,6 +1,7 @@
-package jogi.list.ops
-
-import jogi.list.List
+package jogi
+package typelevel
+package list
+package ops
 
 object Subset {
 

@@ -1,6 +1,7 @@
-package jogi.list.ops
-
-import jogi.list.{ ::, Nil, List }
+package jogi
+package typelevel
+package list
+package ops
 
 trait ListFold[f[_, _], r <: List] {
   type Out

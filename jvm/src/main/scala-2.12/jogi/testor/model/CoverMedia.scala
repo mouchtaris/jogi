@@ -2,7 +2,7 @@ package jogi
 package testor
 package model
 
-import list.{ ::, Nil }
+import typelevel.list.{ ::, Nil }
 import record.{ Entity, rel }
 
 // format: OFF

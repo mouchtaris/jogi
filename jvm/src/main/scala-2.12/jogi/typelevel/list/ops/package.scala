@@ -1,4 +1,6 @@
-package jogi.list
+package jogi
+package typelevel
+package list
 
 package object ops
   extends AnyRef

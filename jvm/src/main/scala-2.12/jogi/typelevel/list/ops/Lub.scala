@@ -1,7 +1,7 @@
-package jogi.list.ops
-
-import jogi.list.{ ::, Nil, List }
-import jogi.typelevel
+package jogi
+package typelevel
+package list
+package ops
 
 trait Lub[r <: List] extends Any {
   type Out

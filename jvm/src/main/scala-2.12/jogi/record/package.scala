@@ -1,7 +1,5 @@
 package jogi
 
-import list.List
-
 /**
  * A record is a list of types.
  *

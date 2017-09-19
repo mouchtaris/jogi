@@ -1,7 +1,7 @@
-package jogi.list.ops
-
-import jogi.list._
-import jogi.typelevel.And
+package jogi
+package typelevel
+package list
+package ops
 
 trait ForAll[r <: List, pred[_]]
 
