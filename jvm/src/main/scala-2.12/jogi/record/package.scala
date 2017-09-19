@@ -44,6 +44,7 @@ package jogi
  * }}}
  */
 package object record {
+  object stdalias extends StdTypeAliases
   object rel extends Relation
   object key extends Key
   object value extends StandardValues

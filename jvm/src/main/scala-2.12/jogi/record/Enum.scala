@@ -3,6 +3,9 @@ package record
 
 import typelevel.list.{ ::, Nil }
 
-trait Enum extends (value.Long :: Nil) {
-  trait values
-}
+/**
+ * An enum is a single "long" value.
+ *
+ * Values of this enum extend this train directly.
+ */
+trait Enum extends (value.Long :: Nil)

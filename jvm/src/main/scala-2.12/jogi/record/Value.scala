@@ -13,8 +13,20 @@ trait Value[scalaType] {
 
 object Value {
 
+  /**
+   * Private instance, which is reused, since this is
+   * a type-level trait.
+   */
   private[this] object Instance extends Value[Nothing]
 
+  /**
+   * An object creator.
+   *
+   * This is used only to create implicit evidence instances.
+   *
+   * @tparam st underlying scala type
+   * @return a instance of Value[st]
+   */
   @inline def apply[st](): Value[st] =
     Instance.asInstanceOf[Value[st]]
 

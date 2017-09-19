@@ -1,11 +1,16 @@
 package jogi.record
 
+/**
+ * A trait that contains the commonly used "standard" value aliases.
+ *
+ * It's uses through a package object that extends it.
+ */
 trait StandardValues {
 
   trait String extends StandardValue[Predef.String]
   implicit case object String extends String
 
-  trait Bytes extends StandardValue[StdTypeAliases.Bytes]
+  trait Bytes extends StandardValue[stdalias.Bytes]
   implicit case object Bytes extends Bytes
 
   trait Long extends StandardValue[scala.Long]
